@@ -1,5 +1,9 @@
 """
-Simple Math Operators
+-=< 100 Days of Python >=-
+-=[ Day 002 ]=-
+"""
+"""
+L22 - Simple Math Operators:
 """
 # Add [plus sign]
 3 + 5

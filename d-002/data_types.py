@@ -1,5 +1,9 @@
 """
-Data Types
+-=< 100 Days of Python >=-
+-=[ Day 002 ]=-
+"""
+"""
+L.19 - Primitive Data Types:
 """
 # String: a string of characters (i.e. text)
 print("Hello"[-1])
@@ -24,7 +28,7 @@ False
 
 # Type Tests:
 # The 'type()' function returns the data-type of a given variable
-print(type('hello')
+print(type('hello'))
 print(type(12))
 print(type(12.34))
 
