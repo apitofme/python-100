@@ -1,9 +1,8 @@
 """
 -=< 100 Days of Python >=-
--=[ Day 001: ]=-
-"""
-"""
-L.12 - Input Function {Coding Exercise}
+-=[ Day 001 ]=-
+
+Coding Exercise: Input Function (L.12)
 """
 # Slide 1: Introduction to Auditorium
 

@@ -1,9 +1,8 @@
 """
 -=< 100 Days of Python >=-
--=[ Day 001: ]=-
-"""
-"""
-L.13 - Variables {Coding Exercise}
+-=[ Day 001 ]=-
+
+Coding Exercise: Variables (L.13)
 """
 # Slide 1: Task - Swtich the values stored in 2 different variables
 a = input() #29

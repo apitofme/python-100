@@ -1,9 +1,8 @@
 """
 -=< 100 Days of Python >=-
--=[ Day 001: ]=-
-"""
-"""
-L.10 - Debugging Practice {Coding Exercise}
+-=[ Day 001 ]=-
+
+Coding Exercise: Debugging Practice (L.10)
 """
 # Slide 1: Fix the code so that it runs without errors
 print(Day 1 - String Manipulation")

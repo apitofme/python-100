@@ -1,6 +1,8 @@
 """
 -=< 100 Days of Python >=-
-- Day 001:  Band Name Generator
+-=[ Day 001 ]=-
+
+Project: Band Name Generator
 """
 print("Welcome to the Band Name Generator.")
 city = input("What's the name of the city you grew up in?\n")

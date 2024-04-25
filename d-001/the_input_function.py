@@ -1,6 +1,6 @@
 """
 -=< 100 Days of Python >=-
--=[ Day 001: ]=-
+-=[ Day 001 ]=-
 """
 """
 L.11 - The Input Function:

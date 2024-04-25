@@ -1,9 +1,8 @@
 """
 -=< 100 Days of Python >=-
--=[ Day 001: ]=-
-"""
-"""
-L.8 - Printing {Coding Exercise}
+-=[ Day 001 ]=-
+
+Coding Exercise: Printing (L.8)
 """
 # Slide 1: Use print statements to print out the recipe below
 """
