@@ -1,5 +1,9 @@
 """
-Control Flow with Conditional Statements:
+-=< 100 Days of Python >=-
+-=[ Day 003 ]=-
+"""
+"""
+L.30 - Control Flow with Conditional Statements:
 
 Conditional statements basically allow us to ask questions in our code
 and perform different operations (i.e. run different code) based on
@@ -43,10 +47,8 @@ opposite values, instead 'else' can be thought of as the "catch-all".
 Whenever a test-value does not meet the conditional criteria the code
 in the ELSE block is what will be run.
 """
-
-
 """
-Comparison Operators:
+- Comparison Operators:
 
 There are several basic comparison operators we can use in our
 conditional test, allowing us to test for different conditions
@@ -76,9 +78,13 @@ if number >= 10:
 else:
     print("The test number is less than 10")
 
+"""
+L.31 - Coding Exercise: Introducing the Modulo
+"""
+# See external file: "exercise_TODO.py"
 
 """
-Introducing additional test statements with ELIF:
+L.32 - Introducing additional test statements with ELIF:
 
 We can demostrate some of the quirks of these operators by introducing
 another part of these conditional statements, the "ELIF" (i.e. 'else-if').
@@ -113,10 +119,8 @@ together they form a single conditional statement!
 
 Try changing the value of 'number' and re-run the code to compare results.
 """
-
-
 """
-Nesting conditional statements:
+- Nesting conditional statements:
 
 Another thing that we can do with conditional statements is to 'nest' them
 inside one another. This allows us to test for supplemental cases rather
@@ -147,9 +151,24 @@ if height >= 120:
 else:
     print("Sorry you aren't tall enough to ride this roller-coaster!")
 
+"""
+L.33 - Coding Exercise: BMI v2.0
+"""
+# See external file: "exercise_TODO.py"
 
 """
-Logical Operators:
+L.34 - Coding Exercise: Leap Year
+"""
+# See external file: "exercise_TODO.py"
+
+"""
+L.36 - Coding Exercise: Pizza Order
+"""
+# See external file: "exercise_pizza_order.py"
+# - "exercise_pizza_alternative.py" has an alternative solution!
+
+"""
+L.37 - Logical Operators:
 
 In addition to the basic comparison operators we saw before there are
 also some basic 'logical' operators which further add to the set of
@@ -177,3 +196,8 @@ So if a statement equates to 'true' then using 'not' would make the result
 'false'. It may seem hard to understand why or when we might need this but
 it will become apparrent, especially when we get to 'while' statements!
 """
+
+"""
+L.38 - Coding Exercise: Love Calculator
+"""
+# See external file: "exercise_TODO.py"
