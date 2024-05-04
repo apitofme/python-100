@@ -5,54 +5,80 @@
 """
 L.30 - Control Flow with Conditional Statements:
 
-Conditional statements basically allow us to ask questions in our code
-and perform different operations (i.e. run different code) based on
-the answer.
+Conditional statements effectively allow us to ask simple 'truthy'
+questions with our code and perform operations based on the answer.
+Bascially we test for the 'truth' of a statement (the test-condition),
+then perform actions based on the outcome of that test.
 
-So with the "IF...ELSE" statement we can test for a specific condition
-then run some code [IF] the statement is 'true', or [ELSE] we run some
-different code when the test condition is 'false'.
+The first of these we will look at is the "IF...ELSE" statement...
+
+>> IF ... ELSE:
+The "if / else" conditional statement allows us to run one block of code
+'IF' the test-condition is "True", or (optionally) a different block of
+code (i.e. the 'ELSE' clause) when the test-condition is NOT "True"
+(i.e. "False").
+
+This can be thought of as:
+-- if THIS ... else THAT
+-- OR --
+-- if THIS do something, ELSE do something else
 
 For example:
 """
-# Note: the single '=' sign here denotes "assignment"
-#       (i.e. variable _equals_ value)
 test_condition = True
 
+print("Test 1:")
 if test_condition:
-    print("Test 1: The test condition is 'true'\n")
+    print("- The test condition is 'true'\n")
 else:
-    print("Test 1: The test condition is NOT true (i.e. is 'false'!)\n")
-# notice how only the first statement under IF gets run!
+    print("- The test condition is NOT 'true'\n")
+# notice that only the statement indented under the 'IF' clause gets run!
 
-# See if you understand the following example:
+# Now, see if you understand the following example:
+print("Test 2:")
 if test_condition == False:
-    print("Test 2: The test condition is 'true'\n")
+    print("- The test condition is 'true'\n")
 else:
-    print("Test 2: The test condition is NOT true (i.e. is 'false'!)\n")
+    print("- The test condition is NOT 'true'\n")
 """
-This time we tested the variable's value against another value using
-what's called a 'conditional operator', in this case we were testing
-for 'equality' (i.e. does THIS _equal_ THAT).
+In the second test we compared the variable's value against another
+value using what's called a 'comparison operator'. In this case we're
+testing for "equality" (i.e. does THIS equal THAT), which we do using
+a double equals sign -- Note: this is different from variable assignment
+which only uses a sinlge equals sign to assign a value to a variable name!
 
 Since we know the value stored in the 'test_condition' variable is TRUE,
-but we are asking if that is equal to FALSE, we can see how the answer is
-no (not 'true'): since TRUE does not equal FALSE. So this time the code
-indented under the ELSE part of the conditional statement is what gets
-executed, since the condition wasn't met to run the first part.
+our conditional statement equates to asking:
 
-We can also begin to see how, depending on the 'question' being asked
-in the conditional statement, IF/ELSE does not have to represent direct
-opposite values, instead 'else' can be thought of as the "catch-all".
-Whenever a test-value does not meet the conditional criteria the code
-in the ELSE block is what will be run.
+    if TRUE is equal to FALSE ...
+
+The answer of course is "no" (i.e. the statement is NOT 'true'), therefore
+the code indented under the 'ELSE' part of the conditional statement is
+executed. (In other words the 'THAT' part of "if THIS ... else THAT")
+
+It is also important to realise that, depending on the 'question' being
+asked (i.e. what test-condition we use), IF and ELSE do not have to
+represent directly opposing values (such as "True" and "Flase"). Instead
+'else' can be thought of as the "catch-all" statement, so that whenever
+a test-value does NOT equate to "True" (for the given test-condition) then
+the code in the 'else' block is executed.
+
+Being able to execute different blocks of code in this way, when different
+inputs are given or different conditions arise, is what is known as
+"flow control" (because we control the 'flow' of our program). This will
+allow us to write more powerful and versatile applications as we progress.
+
+There are other times we will make use of conditional statements beyond
+the "if ... else" format, but we will get to those later. For now let's
+have a look at the different types of comparisons we can perform to allow
+us to write different test-conditions...
 """
 """
-- Comparison Operators:
+>> Comparison Operators:
 
 There are several basic comparison operators we can use in our
-conditional test, allowing us to test for different conditions
--- it doesn't always have to be "does THIS _equal_ THAT" ...
+conditional tests, allowing us to test for different conditions
+-- it doesn't always have to be "does THIS equal THAT" ...
 
     Operator        Meaning
     --------        -------
@@ -63,42 +89,53 @@ conditional test, allowing us to test for different conditions
         ==          Equal to
         !=          Not equal to
 
+Let's have a quick look at some examples to demonstrate how some of these
+comparison operators work:
 """
+# First let's create a variable to test, giving it the numerical value 10
 number = 10
 
+# Now we can compare that variable to another value:
+# - here we'll use the "greater than" symbol '>'
+# -- effectively asking: "if 10 is greater than 10"
 if number > 10:
     print("The test number is greater than 10")
 else:
     print("The test number is NOT greater than 10")
-# notice the output from this test may not be what you were expecting!
-
-# let's fix that here:
+# Notice the output from this test may not be what you were expecting!
+# It ran the code block under the 'else' clause, but why? ...
+# It's because 10 is not GREATER than 10 (i.e. it is not MORE than 10)
+# To include 10 we shouild use the "greater than or equal to" operator
 if number >= 10:
     print("The test number is greater or equal to 10")
 else:
     print("The test number is less than 10")
+# Now we should see the output from the 'if' code block!
 
 """
-L.31 - Coding Exercise: Introducing the Modulo
+L.31 - Coding Exercise: Odd or Even (Introducing the Modulo)
 """
-# See external file: "exercise_TODO.py"
+# See external file: "exercise_odd_or_even.py"
 
 """
-L.32 - Introducing additional test statements with ELIF:
+L.32 - Introducing the ELIF:
 
-We can demostrate some of the quirks of these operators by introducing
-another part of these conditional statements, the "ELIF" (i.e. 'else-if').
-An ELIF block allows us to chain additional conditional tests together
-within the same contextual block of code.
+The final (optional) component of these "if...else" statements we'll look
+at is the "elif" ('else if'), which allows us to use and chain additional
+conditional tests after the intitial 'if' statement.
 
-Effectively we are adding additional 'questions' or tests to consider.
-Where each additional test is only checked if the answer to the previous
-was NOT true, and only proceeding to the ELSE when ALL test are false!
+Effectively we are adding additional 'questions' or tests to consider,
+where each additional test is only checked if the 'answer' to the previous
+was NOT true (i.e. false), and only proceeding to the 'else' when ALL
+previous 'if' or 'elif' tests return false!
+-- i.e. "if (not) THIS ... or THIS ... or THIS ... then THAT"
 
-Now we can split the example from before to show different cases:
+...and we can chain as many together, one after another as we need.
+
+Let's update the example from before to show different cases:
 """
 number = 10
-# This time however we'll change the first test condition to 9!
+# This time however we'll change the first test condition to "> 9"
 if number > 9:
     print("The test number is greater than 10")
 elif number >= 10:
@@ -106,21 +143,33 @@ elif number >= 10:
 else:
     print("The test number is less than 10")
 """
-Note that it still only prints one output, the one from the first statement
-that is 'true'!
+Note that although both of the conditional test are technically 'true',
+since '10' is both "greater than 9" and "greater than or equal to 10",
+we still only see one output printed (i.e. the first one). This is because
+not all test are evaluated. Processing the statements in order, the first
+test to pass as 'true' will have it's code-block executed, the rest of the
+conditional statement is ignored -- remember it is
 
-It does NOT run the code from ALL statement blocks that equate to true
-because once a test passes all other sections are ignored, and if no
-tests pass then only the 'else' code-block is run.
+    "if 'this' ... OR 'this' ... OR(else) 'that'"
+
+This means that only if the previous test was 'false' is the next test
+considered, and only the first test to pass has it's indented code run.
+After which the entire conditional statement, from the 'if' to the end of
+the 'else' block is considered completed. Each block represents an option
+but it is NOT multiple-choice, once one is true all others are ignored.
+-- It's almost like a Schroedinger's Box of code, there are many
+possibilities but once we open it (i.e. run the code) only one remains!
+
+... and if no tests pass then only the 'else' code-block is run.
 
 The entire [IF...ELIF...ELSE...] section is regarded as a single, cohesive
-statement. Whilst each sub-section has it's own indented block of code,
+statement. So whilst each sub-section has it's own indented block of code,
 together they form a single conditional statement!
 
 Try changing the value of 'number' and re-run the code to compare results.
 """
 """
-- Nesting conditional statements:
+>> Nesting conditional statements:
 
 Another thing that we can do with conditional statements is to 'nest' them
 inside one another. This allows us to test for supplemental cases rather
@@ -154,50 +203,155 @@ else:
 """
 L.33 - Coding Exercise: BMI v2.0
 """
-# See external file: "exercise_TODO.py"
+# See external file: "exercise_bmi_v2.py"
 
 """
 L.34 - Coding Exercise: Leap Year
 """
-# See external file: "exercise_TODO.py"
+# See external file: "exercise_leap_year.py"
+
+"""
+L.35 - Multiple IF statements:
+
+When we use an 'elif' in a conditional statement we are only ever going
+to satisfy one test-condition, even if we check for multiple conditions,
+and consequently only one code-block will be run.
+
+However, what if we want to test for multiple conditions that might ALL
+be true, and we want to run some code for each condition that IS true
+regardless of the outcome of any of the other tests? Well, that is where
+multiple 'if' statements comes in.
+
+Since each 'if' statement has it's own test condition and indented
+code-block we can simply have multiple separate statemnts. Each one
+test's for a condition and runs it's code-block if that condition is met.
+Remember an 'if' does NOT require an 'elif' or 'else' to be present, so
+we don't have to include an 'else' clause when the alternative action for
+a given test is simply "do nothing". Also, since we're not 'nesting' any
+of these separate statements, each is evaluated independent of the others.
+
+For an example, imagine we were asked to write a simple program for a
+hotdog vendor. They provide information about what questions they ask
+their customers such as: "Do you want ketchup / mustard?"; "Do you want
+onions?"; "Would you like a drink also?" etc. - These will be the basis
+of our conditional tests.
+
+However, if we wrote the code out using 'elif's then the customer could
+only choose one and whichever one they said yes to first would be what
+they'd get ... Let's demonstrate:
+"""
+# Assume that we've taken anwers to the questions as inputs, resulting in
+wants_ketchup = True
+wants_mustard = True
+wants_onions = True
+# We then process the order as follows:
+hotdog = "Sausage in a bun"
+if wants_ketchup:
+    hotdog += " with red sauce"
+elif wants_mustard:
+    hotdog += " with yellow sauce"
+elif wants_onions:
+    hotdog += " with onions"
+# Then 'give' the hotdog to the customer
+print(hotdog)
+"""
+Notice that, as we learned with an 'if...elif' statement only the first
+condition which is true has it's code-block executed, the others are
+skipped. This means that our 'greedy' customer doesn't get all of the
+toppings they want on their hotdog, they only get ketchup (red sauce)!
+
+In order to allow each statement to be processed independently, thereby
+allowing multiple conmditions to be true AND have their associated code
+executed we must use separate 'if' statements...
+"""
+# Assuming the same inputs as before
+hotdog = "Sausage in a bun"
+if wants_ketchup:
+    hotdog += " with red sauce"
+
+if wants_mustard:
+    hotdog += " with yellow sauce"
+
+if wants_onions:
+    hotdog += " with onions"
+
+# and give the hotdog to the customer
+print(hotdog)
+"""
+Now the output might be a bit 'messy' as far as being a good sentence,
+but it conveys all the necessary information, and if the text were an
+actual hotdog it would meet the customers order as specified!
+"""
 
 """
 L.36 - Coding Exercise: Pizza Order
 """
 # See external file: "exercise_pizza_order.py"
-# - "exercise_pizza_alternative.py" has an alternative solution!
 
 """
 L.37 - Logical Operators:
 
-In addition to the basic comparison operators we saw before there are
-also some basic 'logical' operators which further add to the set of
-conditional tests we can create, these are:
+In addition to the comparison operators we looked at before there is
+also a set of 'logical' operators we can use in Python which allow us to
+build up more complex conditional tests by combining multiple conditions
+in different ways. These are:
 
-        'and'       condition_a AND condition_b
-        'or'        condition_a OR condition_b
-        'not'       is NOT condition_a
+    Keyword:        Format:
+    --------        -------
+    "and"           'condition_a'  AND  'condition_b'
+    "or"            'condition_a'  OR  'condition_b'
+    "not"           is  NOT  'condition'
         
-So for 'and' we can say that a conditional test using this logical operator
-will ONLY return 'true' if BOTH conditions are met, A and B. If either test
-equates to 'false' then the whole statement becomes FALSE.
-    - e.g. - IF has_apple AND has_pear ...
-    So if I only have a pear the combined statement equates to 'false'!
-    I would need to have an apple also for the overall test condition to
-    be 'true'.
+So, when using "and" we can say that a conditional test will only return
+'true' if BOTH conditions are met ('a' AND 'b'). If either condition is
+'false' then the whole statement equates to "false".
 
-Hopefully from that it should already be clear now what will happen if we
-use the 'or' operator - only one of the conditions needs to be 'true':
-    - IF has_apple OR has_pear ...
-    Now even with only a pear the combined statement equates to 'true'!
+    -- e.g:  IF  has_apple  AND  has_pear ...
+    In this case if I only have a pear then the overall statement equates
+    to "false". I would need to have an apple as well for the statement
+    to be true!
 
-The 'not' operator is used to test for the opposite of a statement's result.
-So if a statement equates to 'true' then using 'not' would make the result
-'false'. It may seem hard to understand why or when we might need this but
-it will become apparrent, especially when we get to 'while' statements!
+Given that example you can probably imagine what will happen if we use
+the "or" operator. This requires only one of the conditions to be 'true':
+
+    -- IF  has_apple  OR  has_pear ...
+    Now, even with only a pear the combined statement equates to "true"!
+
+With "or" it is only if BOTH conditions are 'false' that the overall
+statement equates to "false".
+
+Lastly, the "not" operator is used to negate ('flip') the boolean value
+of the given 'operand' (test condition). It inverts the logic of the
+given condition or expression and returns the opposite value, e.g:
+
+    - If a condition equates to 'true' then the "not" operator will make
+    the statement return "False".
+    - If the condition is 'false' then "not" will make the statement
+    return "True"
+
+You can use the "not" operator in various contexts, such as conditional
+statements and while loops, and it's handy when you need to check for
+unmet conditions or control the flow of execution in your programs.
+Remember that the operand can be any Boolean expression or even a
+user-defined value or object!
+
+Example: (pseudo-code)
+
+    if NOT "happy" then:
+        Go outside, Go for a walk, Get some fresh air!
+    else:
+        Yay! I'm happy! =)
 """
+r1 = 2 > 5  # 2 is greater than 5 => False
+r2 = not 2 > 5  # NOT 2 greater than 5 (~"2 NOT greater than 5") => True
+print(r1)
+print(r2)
+"""
+BONUS Coding Exercise: Rollercoaster Ticket (Midlife-Crisis Edition)
+"""
+# See external file: "rollercoaster_midlife_crisis.py"
 
 """
 L.38 - Coding Exercise: Love Calculator
 """
-# See external file: "exercise_TODO.py"
+# See external file: "exercise_love_calculator.py"
