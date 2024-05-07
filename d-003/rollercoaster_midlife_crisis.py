@@ -2,12 +2,12 @@
 -=< 100 Days of Python >=-
 -=[ Day 003 ]=-
 
-Bonus Exercise: Rollercoaster Ticket (Midlife-Crisis Edition)
+Bonus Exercise: Roller-coaster Ticket (Midlife-Crisis Edition)
 """
 """
 Premise:
 Building on the running example from Day 3's lessons - the idea of a
-rollercoaster ticketing office, where tickets can only be sold to people
+roller-coaster ticketing office, where tickets can only be sold to people
 over 120cm tall, and cost different amounts based on age.
 
 We updated it once already to implement the option to pay an additional

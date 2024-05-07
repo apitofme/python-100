@@ -6,7 +6,7 @@ Coding Exercise: Love Calculator (L.38)
 """
 """
 Slide 1: Task
-- Write a program that tests the compatability between two people
+- Write a program that tests the compatibility between two people
 
 To work out the "love score" between two people we will need to check
 for how many times the letters in the words "TRUE" and "LOVE" occur in
@@ -74,10 +74,10 @@ for ltr in str(name1+name2).upper():
 
 # After the loop finishes we concatenate the two counts together as
 # strings (because we don't want to "add" the numbers mathematically)
-# BUT convert thow oeverall score back to store it as an integer
+# BUT we convert the overall score back to an integer to store it
 score = int(str(t_count) + str(l_count))
 
-# Then we conditionally test the socre to output the approriate message
+# Then we conditionally test the score to output the appropriate message
 if score < 10 or score > 90:
     print(f"Your score is {score}, you go together like coke and mentos.")
 elif score >= 40 and score <= 50:

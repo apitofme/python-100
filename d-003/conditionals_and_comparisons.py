@@ -7,7 +7,7 @@ L.30 - Control Flow with Conditional Statements:
 
 Conditional statements effectively allow us to ask simple 'truthy'
 questions with our code and perform operations based on the answer.
-Bascially we test for the 'truth' of a statement (the test-condition),
+Basically we test for the 'truth' of a statement (the test-condition),
 then perform actions based on the outcome of that test.
 
 The first of these we will look at is the "IF...ELSE" statement...
@@ -45,7 +45,7 @@ In the second test we compared the variable's value against another
 value using what's called a 'comparison operator'. In this case we're
 testing for "equality" (i.e. does THIS equal THAT), which we do using
 a double equals sign -- Note: this is different from variable assignment
-which only uses a sinlge equals sign to assign a value to a variable name!
+which only uses a single equals sign to assign a value to a variable name!
 
 Since we know the value stored in the 'test_condition' variable is TRUE,
 our conditional statement equates to asking:
@@ -58,7 +58,7 @@ executed. (In other words the 'THAT' part of "if THIS ... else THAT")
 
 It is also important to realise that, depending on the 'question' being
 asked (i.e. what test-condition we use), IF and ELSE do not have to
-represent directly opposing values (such as "True" and "Flase"). Instead
+represent directly opposing values (such as "True" and "False"). Instead
 'else' can be thought of as the "catch-all" statement, so that whenever
 a test-value does NOT equate to "True" (for the given test-condition) then
 the code in the 'else' block is executed.
@@ -84,7 +84,7 @@ conditional tests, allowing us to test for different conditions
     --------        -------
         >           Greater than
         <           Less than
-        >=          Greate than or equal to
+        >=          Greater than or equal to
         <=          Less than or equal to
         ==          Equal to
         !=          Not equal to
@@ -105,7 +105,7 @@ else:
 # Notice the output from this test may not be what you were expecting!
 # It ran the code block under the 'else' clause, but why? ...
 # It's because 10 is not GREATER than 10 (i.e. it is not MORE than 10)
-# To include 10 we shouild use the "greater than or equal to" operator
+# To include 10 we should use the "greater than or equal to" operator
 if number >= 10:
     print("The test number is greater or equal to 10")
 else:
@@ -122,7 +122,7 @@ L.32 - Introducing the ELIF:
 
 The final (optional) component of these "if...else" statements we'll look
 at is the "elif" ('else if'), which allows us to use and chain additional
-conditional tests after the intitial 'if' statement.
+conditional tests after the initial 'if' statement.
 
 Effectively we are adding additional 'questions' or tests to consider,
 where each additional test is only checked if the 'answer' to the previous
@@ -223,7 +223,7 @@ regardless of the outcome of any of the other tests? Well, that is where
 multiple 'if' statements comes in.
 
 Since each 'if' statement has it's own test condition and indented
-code-block we can simply have multiple separate statemnts. Each one
+code-block we can simply have multiple separate statements. Each one
 test's for a condition and runs it's code-block if that condition is met.
 Remember an 'if' does NOT require an 'elif' or 'else' to be present, so
 we don't have to include an 'else' clause when the alternative action for
@@ -231,7 +231,7 @@ a given test is simply "do nothing". Also, since we're not 'nesting' any
 of these separate statements, each is evaluated independent of the others.
 
 For an example, imagine we were asked to write a simple program for a
-hotdog vendor. They provide information about what questions they ask
+hot-dog vendor. They provide information about what questions they ask
 their customers such as: "Do you want ketchup / mustard?"; "Do you want
 onions?"; "Would you like a drink also?" etc. - These will be the basis
 of our conditional tests.
@@ -240,7 +240,7 @@ However, if we wrote the code out using 'elif's then the customer could
 only choose one and whichever one they said yes to first would be what
 they'd get ... Let's demonstrate:
 """
-# Assume that we've taken anwers to the questions as inputs, resulting in
+# Assume that we've taken answers to the questions as inputs, resulting in
 wants_ketchup = True
 wants_mustard = True
 wants_onions = True
@@ -252,7 +252,7 @@ elif wants_mustard:
     hotdog += " with yellow sauce"
 elif wants_onions:
     hotdog += " with onions"
-# Then 'give' the hotdog to the customer
+# Then 'give' the hot-dog to the customer
 print(hotdog)
 """
 Notice that, as we learned with an 'if...elif' statement only the first
@@ -261,7 +261,7 @@ skipped. This means that our 'greedy' customer doesn't get all of the
 toppings they want on their hotdog, they only get ketchup (red sauce)!
 
 In order to allow each statement to be processed independently, thereby
-allowing multiple conmditions to be true AND have their associated code
+allowing multiple conditions to be true AND have their associated code
 executed we must use separate 'if' statements...
 """
 # Assuming the same inputs as before
@@ -347,7 +347,7 @@ r2 = not 2 > 5  # NOT 2 greater than 5 (~"2 NOT greater than 5") => True
 print(r1)
 print(r2)
 """
-BONUS Coding Exercise: Rollercoaster Ticket (Midlife-Crisis Edition)
+BONUS Coding Exercise: Roller-coaster Ticket (Midlife-Crisis Edition)
 """
 # See external file: "rollercoaster_midlife_crisis.py"
 

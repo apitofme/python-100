@@ -33,14 +33,14 @@ if year % 4 == 0:
             # If it IS then we have a Leap year
             print("Leap year")
         else:
-            # But if NOT then it is not a Leap Year 
+            # But if NOT then it is not a Leap Year
             print("Not leap year")
-        
+
     # When the year IS cleanly divisible by 4 but NOT by 100
     else:
         # Then we have a Leap Year
         print("Leap year")
-    
+
 # Otherwise, the year is NOT cleanly divisible by 4 os is NOT a Leap Year!
 else:
     print("Not leap year")
@@ -61,7 +61,7 @@ else:
         # ...then it IS a leap year
         print("Leap year")
     # However if the year IS evenly divisible by 100 we must now test...
-    # If the year is NOT evely divisible by 400...
+    # If the year is NOT evenly divisible by 400...
     elif year % 400 != 0:
         # ...in which case it is NOT a leap year
         print("Not leap year")

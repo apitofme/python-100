@@ -37,9 +37,9 @@ In Python we use the percent symbol '%' to perform a "mod" operation.
 Slide 2: Solution
 """
 if number % 2 == 0:
-  print("This is an even number.")
+    print("This is an even number.")
 else:
-  print("This is an odd number.")
+    print("This is an odd number.")
 """
 Here we're effectively saying "IF the modulo of the given number divided
 by 2 is equal to 0 (zero) then it is an EVEN number", because there is no
