@@ -18,15 +18,15 @@ we are working with a string. (Note: This is not essential to the output of
 the program but it helps us to think about the problem, and use what we've
 already learned, to come up with a solution.
 """
-print(type(two_digit_number)) # -> 'str'
+print(type(two_digit_number))  # => 'str'
 """
 - Once we know this you may remember that we can use square-brackets, with
 the index position of each specific character, in order to reference each
 characters separately as a sub-string. (Note: the index starts at zero!)
 
 - However, since we plan on adding the two numbers together mathematically
-we must also remember to convert each charcter to an integer, which we can
-do using the 'int()' function.
+we must also remember to convert each character to an integer, which we
+can do using the 'int()' function.
 """
 first_digit = int(two_digit_number[0])
 second_digit = int(two_digit_number[1])

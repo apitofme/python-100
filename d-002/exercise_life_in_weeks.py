@@ -21,7 +21,7 @@ Slide 2: Solution
 years_left = 90 - int(age)
 # Then convert that number of years in to weeks
 weeks_left = years_left * 52
-# Finaly, print the output using an f-string
+# Finally, print the output using an f-string
 print(f"You have {weeks_left} weeks left.")
 
 """

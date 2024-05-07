@@ -6,34 +6,34 @@
 L22 - Simple Math Operators:
 """
 # Addition, which uses the plus sign.
-3 + 5 # => 8
+3 + 5  # => 8
 
 # Subtraction, which uses the 'minus' sign (a.k.a hyphen / dash).
-7 - 4 # => 3
+7 - 4  # => 3
 
-# Multiplication, uses the asterix or 'star' symbol.
-3 * 2 # => 6
+# Multiplication, uses the asterisk or 'star' symbol.
+3 * 2  # => 6
 
 # Division, using the forward-slash symbol.
-6 / 3 # => 2.0
+6 / 3  # => 2.0
 """
 Note: Division will always return a float, even if it divides cleanly!
 
 Also, Python can mix integer and floating point numbers in operations,
 but again the result will always be a float.
 """
-print(2 + 3.0) # => 5.0
+print(2 + 3.0)  # => 5.0
 
 """
-Python has other useful math operators too, such as the double-asterix
+Python has other useful math operators too, such as the double-asterisk
 for raising a number to a power:
 -- e.g. 2 "to the power of" 3 [ i.e. (2 x 2) x 2 = 8 ]
 """
-2 ** 3 # => 8
+2 ** 3  # => 8
 
 """
 Order of Operations: (i.e. "BODMAS" // "PEMDAS")
-- Brackets          //      Parenthases
+- Brackets          //      Parentheses
 - Order             //      Exponent
 - Division          //      Multiplication
 - Multiplication    //      Division
@@ -41,16 +41,16 @@ Order of Operations: (i.e. "BODMAS" // "PEMDAS")
 - Subtraction       //      Subtraction
 
 Note that the two acronyms have the 'M' and 'D' operations flipped!
-This is becuase they are acutally considered EQUAL in priority,
+This is because they are actually considered EQUAL in priority,
 as are 'A' and 'S'. So in either case the priority becomes simply
 the order they are written.
 """
-print(3 * 3 + 3 / 3 - 3) # => 7.0
+print(3 * 3 + 3 / 3 - 3)  # => 7.0
 
 # Challenge: modify the above to get the answer '3'.
 print(3 * (3 + 3) / 3 - 3)
 """
-By placing brackets around '3 + 3' we make that the highest prioriy,
+By placing brackets around '3 + 3' we make that the highest priority,
 so we can demonstrate the process of the equation as follows:
 
 >       3 * (3 + 3) / 3 - 3     -- we start with what's inside the '( )'

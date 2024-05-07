@@ -12,9 +12,9 @@ Ref: https://docs.python.org/3/library/functions.html#round
 This built-in function in Python allows us round a floating point number:
 """
 # - to a whole number
-print(round(8 / 3)) # => 3
-# - or to a specified number of deciaml places (e.g. 2)
-print(round(8 / 3, 2)) # => 2.67
+print(round(8 / 3))  # => 3
+# - or to a specified number of decimal places (e.g. 2)
+print(round(8 / 3, 2))  # => 2.67
 """
 As you can see the second parameter is optional, and is used to specify
 decimal precision (i.e. how many digits we want after the decimal point)
@@ -36,7 +36,7 @@ fractional part (if any) that the normal division would produce.
 So the result of a floor division is just the whole number part
 -- i.e. the bit before the decimal point
 """
-print(8 // 3) # => 2
+print(8 // 3)  # => 2
 # Notice how the result is different from what we got using 'round()'
 """
 Also, remember how division in Python always returns a floating point
@@ -46,7 +46,7 @@ fractional component)?
 Well since floor division doesn't produce a fractional component it will
 always return an integer ('int')!
 """
-print(type(8 // 3)) # => 'int'
+print(type(8 // 3))  # => 'int'
 
 """
 Combination Assignment Operators:
@@ -91,7 +91,7 @@ Ref: https://docs.python.org/3/reference/lexical_analysis.html#f-strings
 
 An f-string allows us to use different data-types in a string without the
 need to convert them first [e.g. with 'str()']. In Python we define an
-f-string by simply typing an 'f' before the opening qutation-mark when
+f-string by simply typing an 'f' before the opening quotation-mark when
 declaring a string -- i.e.
 
     "This is a string"

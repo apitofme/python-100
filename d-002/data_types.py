@@ -18,9 +18,8 @@ We can also access an individual character within a string by placing the
 the left at zero and counting up as as we move to the right) inside a pair
 of square brackets '[]' after the string (or string-variable).
 """
-print("Hello"[0]) # -> 'H'
-world = "World"
-print(world[1]) # -> 'o'
+print("Hello"[0])  # => 'H'
+print("World"[2])  # => 'r'
 
 """
 It is also possible to count backwards from the end of the string!
@@ -37,12 +36,12 @@ print("Hello"[-1])
 Python recognises raw numbers as such and will perform operations
 accordingly:
 """
-print(123 + 345) # -> 468
+print(123 + 345)  # => 468
 """
 However numbers enclosed in quotation marks are treated as a string
 not a number, and operations are performed as such -- e.g:
 """
-print("123" + '345') # -> "123456" (i.e. string concatenation)
+print("123" + '345')  # => "123456" (i.e. string concatenation)
 
 """
 Note: We typically use commas to make a large number more readable
@@ -55,7 +54,7 @@ print(123_456_789)
 >> Float: a 'floating-point' number
 -- i.e. a decimal representation of a fractional or 'non-whole' number.
 """
-pi = 3.14159 # Aside: 'pi' is also an "irrational" number! ;)
+3.14159  # Aside: 'pi' is also an "irrational" number! ;)
 
 """
 >> Boolean: literally "True" or "False" values
@@ -68,19 +67,19 @@ False
 L.20 - Type Error, Type Checking and Type Conversion:
 The 'type()' function returns the data-type of the given input/variable.
 """
-print(type('hello')) # -> "str" -- i.e. a string
-print(type(12)) # -> "int" -- i.e. an integer
-print(type(12.34)) # -> "float" -- i.e. a floating-point number
-print(type(True)) # -> "bool" -- i.e. a boolean
+print(type('hello'))  # => "str" -- i.e. a string
+print(type(12))  # => "int" -- i.e. an integer
+print(type(12.34))  # => "float" -- i.e. a floating-point number
+print(type(True))  # => "bool" -- i.e. a boolean
 
 # An example problem:
 length = len(input("What is your name? "))
-print(type(length)) # -> "int" (integer)
-print(f"Your name has " + length + " characters") # -> TypeError!
+print(type(length))  # => "int" (integer)
+print("Your name has " + length + " characters")  # => TypeError!
 """
 When run, the line of code above results in a "TypeError" because the
 data-type of the variable "length" is an integer but we are attempting
-to use it in the context of string-concatentation (with the '+' symbol).
+to use it in the context of string-concatenation (with the '+' symbol).
 
 When we try to mix data-types in this way Python doesn't know how to treat
 the '+' symbol since 'adding' (i.e. concatenating) strings together and
@@ -95,38 +94,38 @@ Anyway, in order to fix this error we can use another function in Python
 to convert the variable's data-type to a string:
 """
 str_length = str(length)
-print(type(str_length)) # -> "str" (string)
-print(f"Your name has " + str_length + " characters")
+print(type(str_length))  # => "str" (string)
+print("Your name has " + str_length + " characters")
 
 """
 There are of course functions to convert to other data-types too:
 """
-int_number = int("123") # converts the string "123" to an integer
+int_number = int("123")  # converts the string "123" to an integer
 print(type(int_number))
 
-float_number = float("3.14") # converts the string to a floating-point
+float_number = float("3.14")  # converts the string to a floating-point
 print(type(float_number))
 
 """
 It is also possible to convert to a Boolean value using the 'bool()'
-function. Remember earler we said that Boolean values (i.e. True / False)
+function. Remember earlier we said that Boolean values (i.e. True / False)
 can also be represented as '1' or '0'
 """
-print(bool(1)) # -> "True" - converts the integer '1' to a Boolean
-print(bool(0)) # -> "False"
+print(bool(1))  # => "True" - converts the integer '1' to a Boolean
+print(bool(0))  # => "False"
 
 # However there are some quirks to consider when converting to a 'bool':
 # - any number that is NOT zero equates to "True" (even negative numbers)!
-print(bool(2)) # -> "True"
-print(bool(-1)) # -> "True"
+print(bool(2))  # => "True"
+print(bool(-1))  # => "True"
 
 # - anything else that is considered to have a value is also "True",
 #   this includes a string of the number zero
-print(bool("0")) # -> "True"
-print(bool(3.14)) # -> "True"
+print(bool("0"))  # => "True"
+print(bool(3.14))  # => "True"
 
 # - an empty string however DOES equate to "False"
-print(bool("")) # -> "False"
+print(bool(""))  # => "False"
 # ...As does any other EMPTY data-structure, but we'll get to those later!
 
 """

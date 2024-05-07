@@ -5,7 +5,7 @@
 Coding Exercise: BMI Calculator (L.23)
 """
 """
-Slide 1: Task - write a program that calculcates a person's BMI
+Slide 1: Task - write a program that calculates a person's BMI
 
 BMI stand for "Body Mass Index" and it is used as a measure of a person's
 weight relative to their height to determine what is considered "healthy"
@@ -26,9 +26,9 @@ weight = input()
 """
 Slide 2: Solution
 """
-# First we want to convert the inputs, which we recieve as strings,
+# First we want to convert the inputs, which we receive as strings,
 # in to numbers that we can perform mathematical operations on...
-print(type(height)) # we can check the type of input value ('str')
+print(type(height))  # we can check the type of input value ('str')
 weight_as_int = int(weight)
 height_as_float = float(height)
 # Using the exponent operator **
