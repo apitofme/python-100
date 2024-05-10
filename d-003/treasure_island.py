@@ -4,6 +4,8 @@
 
 Project: Treasure Island
 """
+import sys
+
 print("Welcome to Treasure Island.")
 print("Your mission is to find the treasure.")
 
@@ -17,7 +19,7 @@ while choice not in ['left', 'right']:
 # process input
 if choice == 'right':
     print("You fell in to a hole. Game Over.")
-    exit()
+    sys.exit()
 
 # Lake crossing:
 print("You've come to a lake. There is an island in the middle of the lake.")
@@ -31,7 +33,7 @@ while choice not in ['wait', 'swim']:
 # process input
 if choice == 'swim':
     print("You get attacked by an angry trout. Game Over")
-    exit()
+    sys.exit()
 
 # Coloured doors:
 print("You arrive at the island unharmed. There is a house with 3 doors.")
@@ -44,11 +46,11 @@ while choice not in ['red', 'yellow', 'blue']:
 # process input
 if choice == 'red':
     print("It's a room full or fire. Game Over")
-    exit()
+    sys.exit()
 if choice == 'blue':
     print("You enter a room of beasts. Game Over")
-    exit()
+    sys.exit()
 
 # WINNER!
 print("You found the treasure! You Win!")
-exit()
+sys.exit()
