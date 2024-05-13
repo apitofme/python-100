@@ -68,3 +68,13 @@ for f in fruits:
     print("This is printed at the end of each loop!\n")
 # un-indented code is "outside" of the loop, so only runs once
 print("This is printed only once, after the loop has finished!")
+
+"""
+L.52 - Coding Exercise: Average Height
+"""
+# See external file: "exercise_average_height.py"
+
+"""
+L.53 - Coding Exercise: High Score
+"""
+# See external file: "exercise_high_score.py"
