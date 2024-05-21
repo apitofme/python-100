@@ -21,6 +21,15 @@ from hangman_art import stages
 print("Welcome to")
 print(logo)
 
+# set up the player's lives
+# lives = 6
+# actually, I prefer this idea from another student...
+lives = len(stages) - 1
+# ...it is more flexible if we want to modify the game
+# e.g. to increase the number of Lives
+# i.e. by 'building' the Gallows BEFORE drawing the Man
+# print(lives)
+
 # chose a word for the player to guess
 word_list = ["aardvark", "baboon", "camel"]
 chosen_word = random.choice(word_list)
@@ -71,7 +80,6 @@ def update_word_mask(guessed_letter):
 
 
 # loop game until player has won or lost
-lives = 6
 game_over = False
 while not game_over:
     # ask player for a letter guess
