@@ -14,8 +14,10 @@ of the classic Pencil & Paper game "Hangman" using Python.
 """
 # imports up top
 import random
-from hangman_art import logo
-from hangman_art import stages
+
+# import local game modules
+from hangman_art import logo, stages
+from hangman_words import word_list
 
 # welcome
 print("Welcome to")
@@ -31,7 +33,6 @@ lives = len(stages) - 1
 # print(lives)
 
 # chose a word for the player to guess
-word_list = ["aardvark", "baboon", "camel"]
 chosen_word = random.choice(word_list)
 print("I have chosen a random word for you to guess!\n")
 
@@ -39,45 +40,49 @@ print("I have chosen a random word for you to guess!\n")
 word_mask = "_" * len(chosen_word)
 print(word_mask + "\n")
 
+# we want to track the players guesses too
+guesses = ""
+
 
 def get_player_guess():
     """get and validate user input as the player's guess"""
     while True:
-        # player_guess = input("What letter do you guess?\n").lower()
-        # TODO remove the 'hard coded' input below... >>
-        player_guess = "a"
-        standard_input = "a"
-        print(input())
-        # << ...it is only needed for the VSCode REPL extension
+        player_guess = input("What letter do you guess? ").lower()
+
         # guesses should only be letters (not numbers or other characters)
         if not player_guess.isalpha():
-            print("Please only choose letters. There are no \
-                non-alphabetical characters in any of the words.")
+            print("Please only choose letters!")
+            print("- There are no non-alphabetical characters in any of the words.\n")
             continue
 
         # players should only guess one letter at a time
         if len(player_guess) > 1:
             print("Please only guess one letter at a time!")
-            print("Taking the first letter as your guess this time.")
+            print("- Taking the first letter as your guess this time.\n")
             return player_guess[0]
 
         # otherwise the guess is fine
         return player_guess
 
 
-def update_word_mask(guessed_letter):
-    """update the word mask when a correct letter was guessed"""
+def update_word_mask(guessed_letters):
+    """update the word mask with ALL letters guessed so far"""
     mask = ""
     # for each letter in the chosen word...
     for letter in chosen_word:
-        # if the letter matches the player's guess
-        if letter == guessed_letter:
-            # update the word mask with the letter
-            mask += guessed_letter
+        # if the letter is in the player's guesses
+        if letter in guessed_letters:
+            # update the word mask with that letter
+            mask += letter
         else:
+            # otherwise continue to mask it
             mask += "_"
+
     return mask
 
+
+# (optionally) print starting 'stage' from ASCii art
+print(stages[-1])
 
 # loop game until player has won or lost
 game_over = False
@@ -85,26 +90,43 @@ while not game_over:
     # ask player for a letter guess
     guess = get_player_guess()
 
+    # check if the player already guessed that letter
+    if guess in guesses:
+        print(f"Sorry, you have already tried '{guess}'.")
+        # restart the while loop immediately, ignore any remaining code
+        continue
+
+    # track the player's guesses
+    guesses += guess
+
     # check for player's guess in chosen word
     if guess in chosen_word:
         print("You guessed correct!\n")
-        word_mask = update_word_mask(guess)
-        print(" ".join(word_mask) + "\n")
+        # update the word mask (function requires ALL guesses!)
+        word_mask = update_word_mask(guesses)
     else:
-        print(f"Sorry there is no '{guess}' in the word.")
+        print(f"Sorry there is no '{guess}' in the word.\n")
         lives -= 1
+
+    # show the current word mask
+    print(" ".join(word_mask) + "\n")
+
+    # show all letters the player has guessed so far
+    if guesses != "":
+        print("Guessed Letters: " + " ".join(guesses))
+
+    # show the game stage for current lives
+    print(stages[lives])
 
     # check if the player has guessed all of the letters in 'chosen_word'
     # - Game Over: WIN
     if "_" not in word_mask:
-        print("You escaped the Hangman - You win!")
+        print("You escaped the Hangman - You win!\n")
         game_over = True
 
     # check if the player has run out of lives
     # - Game Over: LOSE
     if lives == 0:
-        print("You've been hung - You lose!")
+        print("You've been hung - You lose!\n")
+        print(f"The word was: {chosen_word}")
         game_over = True
-
-    # show the game stage for current lives
-    print(stages[lives])
