@@ -69,13 +69,15 @@ def update_word_mask(guessed_letter):
     return mask
 
 
-# ask player for a letter guess
-guess = get_player_guess()
+# loop the player guesses until 'chosen_word' complete
+while "_" in word_mask:
+    # ask player for a letter guess
+    guess = get_player_guess()
 
-# check for player's guess in chosen word
-if guess in chosen_word:
-    print("You guessed correct!\n")
-    word_mask = update_word_mask(guess)
-    print(" ".join(word_mask) + "\n")
-else:
-    print(f"Sorry there is no '{guess}' in the word.")
+    # check for player's guess in chosen word
+    if guess in chosen_word:
+        print("You guessed correct!\n")
+        word_mask = update_word_mask(guess)
+        print(" ".join(word_mask) + "\n")
+    else:
+        print(f"Sorry there is no '{guess}' in the word.")
