@@ -81,3 +81,6 @@ while "_" in word_mask:
         print(" ".join(word_mask) + "\n")
     else:
         print(f"Sorry there is no '{guess}' in the word.")
+
+    if "_" not in word_mask:
+        print("You win!")
