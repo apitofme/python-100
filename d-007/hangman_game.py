@@ -14,34 +14,22 @@ of the classic Pencil & Paper game "Hangman" using Python.
 """
 # imports up top
 import random
+from os import system
 
 # import local game modules
 from hangman_art import logo, stages
 from hangman_words import word_list
 
-# welcome
-print("Welcome to")
-print(logo)
 
-# set up the player's lives
-# lives = 6
-# actually, I prefer this idea from another student...
-lives = len(stages) - 1
-# ...it is more flexible if we want to modify the game
-# e.g. to increase the number of Lives
-# i.e. by 'building' the Gallows BEFORE drawing the Man
-# print(lives)
+def clear_terminal():
+    """cross-platform way to clear the terminal screen"""
+    system("cls||clear")
 
-# chose a word for the player to guess
-chosen_word = random.choice(word_list)
-print("I have chosen a random word for you to guess!\n")
 
-# set up the masked word to display
-word_mask = "_" * len(chosen_word)
-print(word_mask + "\n")
-
-# we want to track the players guesses too
-guesses = ""
+def game_header():
+    """display the game's header ASCii art"""
+    print("Welcome to")
+    print(logo)
 
 
 def get_player_guess():
@@ -81,6 +69,29 @@ def update_word_mask(guessed_letters):
     return mask
 
 
+def update_display():
+    """clear the terminal screen and redisplay the game's header"""
+    clear_terminal()
+    game_header()
+
+
+# set up the player's lives
+lives = len(stages) - 1
+# we want to track the players guesses too
+guesses = ""
+
+# welcome message
+# - clear the terminal and display the game's header
+update_display()
+
+# chose a word for the player to guess
+chosen_word = random.choice(word_list)
+print("I have chosen a random word for you to guess!\n")
+
+# set up the masked word to display
+word_mask = "_" * len(chosen_word)
+print(" ".join(word_mask) + "\n")
+
 # (optionally) print starting 'stage' from ASCii art
 print(stages[-1])
 
@@ -95,6 +106,9 @@ while not game_over:
         print(f"Sorry, you have already tried '{guess}'.")
         # restart the while loop immediately, ignore any remaining code
         continue
+
+    # let's keep the console output tidy
+    update_display()
 
     # track the player's guesses
     guesses += guess
