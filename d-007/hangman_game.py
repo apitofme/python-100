@@ -15,6 +15,7 @@ of the classic Pencil & Paper game "Hangman" using Python.
 # imports up top
 import random
 from hangman_art import logo
+from hangman_art import stages
 
 # welcome
 print("Welcome to")
@@ -69,8 +70,10 @@ def update_word_mask(guessed_letter):
     return mask
 
 
-# loop the player guesses until 'chosen_word' complete
-while "_" in word_mask:
+# loop game until player has won or lost
+lives = 6
+game_over = False
+while not game_over:
     # ask player for a letter guess
     guess = get_player_guess()
 
@@ -81,6 +84,19 @@ while "_" in word_mask:
         print(" ".join(word_mask) + "\n")
     else:
         print(f"Sorry there is no '{guess}' in the word.")
+        lives -= 1
 
+    # check if the player has guessed all of the letters in 'chosen_word'
+    # - Game Over: WIN
     if "_" not in word_mask:
-        print("You win!")
+        print("You escaped the Hangman - You win!")
+        game_over = True
+
+    # check if the player has run out of lives
+    # - Game Over: LOSE
+    if lives == 0:
+        print("You've been hung - You lose!")
+        game_over = True
+
+    # show the game stage for current lives
+    print(stages[lives])
