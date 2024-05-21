@@ -20,10 +20,14 @@ from hangman_art import logo
 print("Welcome to")
 print(logo)
 
-# choose a random word for the player to guess
+# chose a word for the player to guess
 word_list = ["aardvark", "baboon", "camel"]
 chosen_word = random.choice(word_list)
 print("I have chosen a random word for you to guess!\n")
+
+# set up the masked word to display
+word_mask = "_" * len(chosen_word)
+print(word_mask + "\n")
 
 
 def get_player_guess():
@@ -51,11 +55,27 @@ def get_player_guess():
         return player_guess
 
 
+def update_word_mask(guessed_letter):
+    """update the word mask when a correct letter was guessed"""
+    mask = ""
+    # for each letter in the chosen word...
+    for letter in chosen_word:
+        # if the letter matches the player's guess
+        if letter == guessed_letter:
+            # update the word mask with the letter
+            mask += guessed_letter
+        else:
+            mask += "_"
+    return mask
+
+
 # ask player for a letter guess
 guess = get_player_guess()
 
 # check for player's guess in chosen word
 if guess in chosen_word:
-    print(f"Yes there is an {guess} in the word.\n")
+    print("You guessed correct!\n")
+    word_mask = update_word_mask(guess)
+    print(" ".join(word_mask) + "\n")
 else:
-    print(f"Sorry there is no {guess} in the word.")
+    print(f"Sorry there is no '{guess}' in the word.")
