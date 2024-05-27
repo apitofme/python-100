@@ -3,6 +3,7 @@
 -=[ Day 008 ]=-
 
 Coding Exercise: Paint Area Calculator (L.84)
+Ref: https://app.auditorium.ai/lesson/eelyNMYJKXeNJAbjssSEQz0m88XvnhX6/e242258e-5006-40f1-9228-8e3a8c7482cc?sl=0d712e20-d561-45cf-bfbf-c92981083867&st=z0IFbiDuWJfMR7kz7qBfuQgxDzjqkjal
 """
 """
 Slide 1: Task
