@@ -23,53 +23,37 @@ text = input("Type your message:\n").lower()
 shift = int(input("Type the cipher's shift offset: "))
 
 
-def encrypt(plain_text, shift_amount):
-    """encrypt plain-text using "Caesar's Cipher" by adding the shift"""
+def caesar(cipher_mode, input_text, shift_amount):
+    """encrypt / decrypt text using "Caesar's Cipher" and shift-offsets"""
+    # NOTE: Not all alphabets have 26 characters, we may also want to
+    #       permit more complex / combined ciphers (e.g. alpha-numeric)!
     cipher_length = len(alphabet)
-    encoded_text = ""
-    for char in plain_text:
-        # handle non-alphabetical characters (e.g. spaces / punctuation)
+
+    output_text = ""
+    for char in input_text:
+        # handle non-alphabetical characters (e.g. spaces, punctuation etc.)
         if char not in alphabet:
-            encoded_text += char
+            output_text += char
         else:
-            # calculate the cipher-encoded reference for the character
-            cipher_index = alphabet.index(char) + shift_amount
-            # keep the look-up reference within the cipher's range
-            # NOTE: better than using hard-coded "26" >> allows flexibility
-            #       + list index starts at 0 (zero)! [hence the "-1"]
-            if cipher_index > cipher_length - 1:
-                cipher_index -= cipher_length
+            # NOTE: Using the modulo (%) ensures index values always fall
+            #       within the necessary range, since any value that does
+            #       not cleanly divide will leave a remainder equivalent to
+            #       looping the index reference back around!
+            if cipher_mode == 'encode':
+                # calculate the cipher-encoded reference for the character
+                cipher_index = (alphabet.index(char) +
+                                shift_amount) % cipher_length
+            elif cipher_mode == 'decode':
+                # calculate the cipher-decoded reference for the character
+                cipher_index = (alphabet.index(char) -
+                                shift_amount) % cipher_length
+            else:
+                # NOTE: input validation should really be done when it is
+                #       collected, looping until valid input accepted and
+                #       therefore avoiding the need to throw an exception!
+                raise ValueError(
+                    f"Direction MUST be either 'encode' OR 'decode': {direction}")
 
-            encoded_text += alphabet[cipher_index]
+            output_text += alphabet[cipher_index]
 
-    return encoded_text
-
-
-def decrypt(cipher_text, shift_amount):
-    """decrypt cipher-text using "Caesar's Cipher" by removing the shift"""
-    cipher_length = len(alphabet)
-    decoded_text = ""
-    for char in cipher_text:
-        # handle non-alphabetical characters (e.g. spaces / punctuation)
-        if char not in alphabet:
-            decoded_text += char
-        else:
-            # calculate the cipher-decoded reference for the character
-            cipher_index = alphabet.index(char) - shift_amount
-            # keep the look-up reference within the cipher's range
-            if cipher_index > cipher_length - 1:
-                cipher_index -= cipher_length
-
-            decoded_text += alphabet[cipher_index]
-
-    return decoded_text
-
-
-# allow user to encode or decode messages
-if direction == 'encode':
-    print(encrypt(text, shift))
-elif direction == 'decode':
-    print(decrypt(text, shift))
-else:
-    raise ValueError(
-        f"Direction MUST be either 'encode' OR 'decode': {direction}")
+    return output_text
