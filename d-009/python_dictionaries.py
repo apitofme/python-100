@@ -186,4 +186,67 @@ L.93 - Coding Exercise: Student Grading Program
 """
 L.94 - Nesting Lists and Dictionaries
 
+We have already touched on the idea of 'nesting' when previously working
+with IF statements, FOR loops etc. It is the name we use when we put a
+piece of code within another piece of code (typically of the same type),
+so an IF inside another IF statement, or a loop within another loop.
+
+Well we can do the same with our data-storage structures, remember a List
+doesn't really care what data we store in it so why not store another List,
+or a Dictionary, or vice-versa -- e.g.:
+
+    nesting_dict = {
+        Key1: [List],
+        Key2: {Dict},
+    }
+
+    nesting_list = [
+        [Item1, Item2],
+        {Key1: Value1, Key2: Value2},
+    ]
 """
+# Examples:
+# a simple Dictionary of Countries (keys) and their Capital Cities (values)
+capitals = {
+    "France": "Paris",
+    "Germany": "Berlin",
+}
+
+# nesting a List in a Dictionary (List ALL cities visited in a Country)
+travel_log = {
+    "France": ["Paris", "Cherbourg", "Dijon"],
+    "Germany": ["Berlin", "Hamburg", "Munich"],
+}
+
+# nesting a Dictionary in a Dictionary
+# - add more info to the travel log (classifying the information)
+travel_log = {
+    "France": {
+        "cities_visited": ["Paris", "Cherbourg", "Dijon"],
+        "total_visits": 5,
+    },
+    "Germany": {
+        "cities_visited": ["Berlin", "Hamburg", "Munich"],
+        "total_visits": 12,
+    },
+}
+
+# nesting a Dictionary in a List
+# - update travel log to a List containing Dictionaries for each country
+travel_log = [
+    {
+        "country": "France",
+        "cities_visited": ["Paris", "Cherbourg", "Dijon"],
+        "total_visits": 5,
+    },
+    {
+        "country": "Germany",
+        "cities_visited": ["Berlin", "Hamburg", "Munich"],
+        "total_visits": 12,
+    },
+]
+
+"""
+L.95 - Coding Exercise: Travel Log
+"""
+# See external file: "exercise_travel_log.py"
