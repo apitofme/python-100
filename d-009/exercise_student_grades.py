@@ -3,6 +3,7 @@
 -=[ Day 009 ]=-
 
 Coding Exercise: Student Grading Program (L.93)
+Ref: https://app.auditorium.ai/lesson/eelyNMYJKXeNJAbjssSEQz0m88XvnhX6/56feec3f-61a3-47e9-95d9-7f9871a9a09a?sl=d568e30d-6f5e-46d3-9f36-167c874b232a&st=LjVbIcYUBnS3G9xyUt7QmjC6s8Yv8LBI
 """
 """
 Slide 1: Task
