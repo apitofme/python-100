@@ -14,10 +14,10 @@ we can perform the same operation multiple times without the need to type
 out the same code again and again.
 
 Note however that these are not necessarily operations which we want to
-perform consecutively, as for that we might use a loop. Rather, they allow
-us to break down tasks in to simpler, repeatable steps. helping us to keep
-each piece of code focussed on a specific task as well as keep the code
-cleaner and tidier and therefore easier to read and understand.
+perform consecutively (for which we might use a loop) but rather they allow
+us to break down tasks in to simpler, repeatable steps. This helps us to
+keep each piece of code focussed on a specific task, as well as keep the
+code cleaner and tidier and as such easier to read and understand.
 
 We started off using a 'basic' function with no input parameters.
 Which to remind us we create using the 'def' keyword followed by a name
@@ -30,8 +30,8 @@ then a set of parentheses.
         # goes here
 
 Then we introduced input variables (arguments) which allow us to pass data
-(parameters) in to the function. The data being assigned to 'local'
-variable names within the context (scope) of the function, for processing.
+(parameters) in to the function, the data being assigned to local variables
+within the context (scope) of the function, for processing.
 
     def my_function_with_inputs(arg1=param1, arg2=param2):
         # code to execute when function is called
@@ -50,11 +50,11 @@ returned.
         # ultimately giving us the result of that processing
         # i.e. result = result_of_processing
         # then we return that result...
-        return output
+        return result
 
 The data/value contained in the result is returned to the place in the code
 where the function was called, so we might typically use a variable
-assignment to capture and store the returned data.
+assignment to capture and store the returned data, as follows:
 
     result_of_function = my_return_function()
 
@@ -109,6 +109,6 @@ print(
 )
 
 """
-L.10_ - Coding Exercise: 
+L.102 - Coding Exercise: Days in Month
 """
-# See external file: "exercise_.py"
+# See external file: "exercise_days_in_month.py"
