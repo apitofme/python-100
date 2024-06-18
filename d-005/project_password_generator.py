@@ -7,6 +7,9 @@ Project: Password Generator
 The goal of this project is to build an automated password generator that
 will take input from the user to determine how many Letters, Numbers and
 Symbols should be used to create a completely random and secure password.
+
+Learning for this project will include:
+- FOR Loops; the Range Function; Code Blocks; Randomisation and Shuffle
 """
 # imports up top!
 import random
