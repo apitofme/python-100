@@ -3,6 +3,19 @@
 -=[ Day 004 ]=-
 
 Project: Rock, Paper, Scissors
+
+With our project today we'll be learning about Randomisation and Lists as
+we implement a simple computer version of the classic hand-gesture game
+"Rock, Paper, Scissors" - Allowing a User to play against the computer!
+
+Some of the things we'll learn about as we go are:
+- List Objects: Indexing Offset, Appending Items, Nested Lists etc.
+- The Random Module: Importing, Calling Functions etc.
+
+NOTE:
+    Rather than using numbers to represent "Rock", "Paper" and "Scissors"
+    I decided to use the actual words ... this complicated things somewhat!
+    (See external file "project_rps_official.py" for the 'Official Solution')
 """
 # imports up top
 import random
