@@ -2,8 +2,24 @@
 -=< 100 Days of Python >=-
 -=[ Day 006 ]=-
 
-Project:
-- Reeborg's World: Escaping the Maze
+Project: Reeborg's World
+
+The project for today is a little different as we'll be using an external
+website called "Reeborg's World" which (to quote the site) "is intended to
+help beginners to learn programming, using Python".
+
+NOTE:
+    It is effectively a web based version of the author's previous Desktop
+    Application "RUR-PLE" -- Ref: https://en.wikipedia.org/wiki/RUR-PLE
+    The concept is similar to that of TURTLE (for those old enough to
+    remember that!) -- Ref: https://en.wikipedia.org/wiki/Turtle_graphics
+
+Topics we'll cover along the way include:
+- Code Blocks and Indentation; Functions; WHILE Loops and more...
+
+
+>> Reeborg's World: Escaping the Maze
+-- https://reeborg.ca/reeborg.html?lang=en&mode=python&url=worlds%2Ftutorial_en%2Fmaze1.json
 
 World Info:
 Reeborg was exploring a dark maze when the battery in it's flash-light died.
