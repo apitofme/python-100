@@ -6,12 +6,11 @@ Project:
 - Reeborg's World: Escaping the Maze
 
 World Info:
-Reeborg was exploring a dark maze and the battery in its flash-light ran
-out.
+Reeborg was exploring a dark maze when the battery in it's flash-light died.
 
-Write a program using an if/elif/else statement so Reeborg can find the
-exit. The secret is to have Reeborg follow along the right edge of the
-maze, turning right if it can, going straight ahead if it can't turn right,
+Write a program using an if/elif/else statement so Reeborg can find the exit.
+The secret is to have Reeborg follow along the right edge of the maze,
+turning right if it can, going straight ahead if it can't turn right,
 or turning left as a last resort.
 
 What you need to know:
@@ -21,7 +20,6 @@ What you need to know:
     - How to use a while loop and if/elif/else statements.
     - It might be useful to know how to use the negation of a test
       (i.e. "not" in Python).
-
 """
 """
 >> Solution:
@@ -47,7 +45,7 @@ that result in the code above getting stuck in an infinite loop, never
 reaching the goal.
 
 Thankfully the Reeborg's World website allow you to save and load specific
-Worlds, so rather than having to reload the page repeatedly until one of 
+Worlds, so rather than having to reload the page repeatedly until one of
 these edge cases turns up you can load World from a file. There are three
 files included in the course resources for today that you can use to test
 and hopefully "debug" the code in the solution above, to improve it so that
@@ -100,14 +98,14 @@ it passes all of these edge case scenarios as well.
                     turn_left()
 
 Not going to lie this was a LOT trickier than I expected to pass all three
-test files AND still pass the 'regular' random Maze! Needless to say I
-cannot guarantee this solution has a 100% success rate, but it passes all
-3 test scenarios and my limited random testing.
+test files AND still pass the regular random Maze! Needless to say I cannot
+guarantee this solution has a 100% success rate, but it passes all 3 test
+scenarios and my limited random testing.
 
 During my struggle I was getting tempted to simply use a rotation tracking
-variable in order to test for 360 degree full-rotation (i.e. a circular
-path, which would mean an infinite loop), but that felt like a bit of a
-hack so I held out hope for a LOGICAL solution.
+variable in order to test if 360 degrees of rotation had occurred due to a
+circular path (which would mean an infinite loop), but that felt like a bit
+of a hack so I held out hope for a LOGICAL solution.
 
 In the end my solution was based on the idea of finding a wall and getting
 it on to the right-hand side, then sticking to it for as long as possible
@@ -117,17 +115,19 @@ was a wall to the right once more. This loop involved moving Forward if
 possible, only turning Right when Forward was not possible, and then only
 turning Left when no other possibilities remained. -- This is really only
 what the 'brief' for the Maze Challenge explained, but implementing it in
-a way that functioned as expected proved to be quite difficult after all!
+a way that functioned as expected proved to be quite difficult!
 
 
 >> Angela's Solution:
 
-This is a much simpler and more succinct solution than mine above, and
-honestly I did have the thought that in order to FIX this 'bug' with the
-Maze Challenge then the FIRST thing to do is move until I hit a wall then
-turn to put that wall on the right-hand side of me. Unfortunately my brain
-wasn't braining so good so I didn't think to put this OUTSIDE of the main
-loop in order to escape any difficult starting positions.
+This proved to be a much simpler and more succinct solution than mine above.
+Honestly I did initially have the thought that (in order to FIX this 'bug'
+with the Maze Challenge) the FIRST thing to do is move until I hit a wall,
+then turn Left to put that wall on the right-hand side of me.
+
+Unfortunately my brain wasn't braining so good so I didn't think to put this
+OUTSIDE of the main loop in order to escape any difficult starting positions
+(So I'd persisted to attempt to find a solution that worked INSIDE the loop!)
 
 
     # THIS is how we 'fix' our edge-case problems causing infinite loops
@@ -138,7 +138,7 @@ loop in order to escape any difficult starting positions.
     # TURN LEFT in order to put the wall on our right-hand side
     turn_left()
 
-    # So this part is tha same as the original 'buggy' solution
+    # So this part is the same as the original 'buggy' solution
     while not at_goal():
         if right_is_clear():
             turn_right()
