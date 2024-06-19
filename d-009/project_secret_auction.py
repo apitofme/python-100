@@ -9,6 +9,9 @@ ask if there are other bidders: if "yes" it clears the screen (to hide the
 previous bid) and takes new input from another bidder and adds it to the
 auction bidder Dictionary; if "no" (once all bidders are entered) then the
 program works out who has the highest bid and therefore wins the auction.
+
+Topics covered by this will mostly focus on:
+- Dictionaries; Nesting
 """
 # we need a way to clear the screen (as we're not doing this on replit)
 from os import system
