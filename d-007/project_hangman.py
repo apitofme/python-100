@@ -11,6 +11,9 @@ Project: Hangman Game
 
 The goal of today's project is to implement a playable digital version
 of the classic Pencil & Paper game "Hangman" using Python.
+
+During the process we'll cover topics including:
+- For & While Loops; If/Else Statements; Lists; Strings; Range; Modules
 """
 # imports up top
 import random
