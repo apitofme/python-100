@@ -4,15 +4,18 @@
 
 Project: Caesar Cipher
 
-Create a program that allows us to both encrypt and decrypt messages using
-the Caesar Cipher (shift cipher).
+    "Named after the famous Roman Emperor Julius Caesar the 'Caesar Cipher'
+    (or 'shift cipher') is a type of substitution cipher in which each
+    letter of the plaintext is 'shifted' and replaced by a letter some
+    fixed number of positions down the alphabet. For example, with a left
+    shift of 3, D would be replaced by A, E would become B, and so on."
+    - Ref: https://en.wikipedia.org/wiki/Caesar_cipher
 
-Named after the famous Roman Emperor Julius Caesar the "Caesar Cipher" (or
-'shift cipher') is a type of substitution cipher in which each letter of
-the plaintext is 'shifted' and replaced by a letter some fixed number of
-positions down the alphabet. For example, with a left shift of 3, D would
-be replaced by A, E would become B, and so on.
-- Ref: https://en.wikipedia.org/wiki/Caesar_cipher
+The goal of our project today is to create a program that allows us to both
+encrypt and decrypt messages using the Caesar Cipher (shift cipher).
+
+In the process we will learn about:
+- Functions with Inputs; Arguments & Parameters and more...
 """
 # can't be bothered to create and import the art as a module!
 logo = r'''
