@@ -21,7 +21,7 @@ print("Day 1 - String Manipulation")
 print('String Concatenation is done with the "+" sign.')
 # - Removed the incorrect indentation
 print('e.g. print("Hello " + "world")')
-# - Removed the extra '(' at the opening print function parenthasis
+# - Removed the extra '(' at the opening print function parenthesis
 print("New lines can be created with a backslash and n.")
 
 """

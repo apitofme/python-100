@@ -34,7 +34,7 @@ print("Hello " + "Python")
 print("Hello" + " Python")
 print("Hello" + " " + "Python")
 
-# Python's Peronsal Space Issues:
+# Python's Personal Space Issues:
 # - Python is very fussy about how space is used when writing code
     print("Hello" + "Python")
     # - Note that this results in an "IndentationError"

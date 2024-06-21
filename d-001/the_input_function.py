@@ -30,7 +30,7 @@ L.12 - Coding Exercise: Input Function
 L.13 - Python Variables:
 
 When we take user input as we did before we're only actually using it
-at the moment it's created, which is reather limiting, but what if
+at the moment it's created, which is rather limiting, but what if
 we could store that data to use, process and re-use again later?
 That's where "variables" come in.
 
@@ -51,7 +51,7 @@ print(name)
 name = "Something Else"
 print(name)
 # This time when we print 'name' the output is different,
-# becasue we changed the value (data) assigned to that variable.
+# because we changed the value (data) assigned to that variable.
 
 """
 L.14 - Coding Exercise: Variables
@@ -86,7 +86,7 @@ There are some basic rules to the names we can use in Python too...
 
 - Finally (as we mentioned above) you shouldn't use a name that is
   already used by Python for something (such as a function or class).
-  -- e.g. 'input' is a bad name for a variable becuase there is already
+  -- e.g. 'input' is a bad name for a variable because there is already
      a function with the same name!
 
 NOTE:
@@ -96,6 +96,6 @@ any kind of spell-checking, it only occurs because (when) a name is not
 recognised (because it hasn't been previously assigned).
 """
 # e.g. if we assign a value to "name"
-name = "Fred Bloggs"
+name = "Fred Blogs"
 # but mistype or misspell that variable name when we try to print it
-print(nama) # <- This will cause a "NameError"!
+print(nama)  # <- This will cause a "NameError"!
