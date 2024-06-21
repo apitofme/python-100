@@ -36,7 +36,7 @@ else:
 
 # Now, see if you understand the following example:
 print("Test 2:")
-if test_condition == False:
+if test_condition is False:
     print("- The test condition is 'true'\n")
 else:
     print("- The test condition is NOT 'true'\n")
@@ -342,8 +342,9 @@ Example: (pseudo-code)
     else:
         Yay! I'm happy! =)
 """
+# pylint: disable=comparison-of-constants,unnecessary-negation
 r1 = 2 > 5  # 2 is greater than 5 => False
-r2 = not 2 > 5  # NOT 2 greater than 5 (~"2 NOT greater than 5") => True
+r2 = not 2 > 5  # 2 NOT greater than 5 => True
 print(r1)
 print(r2)
 """
