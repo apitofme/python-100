@@ -43,8 +43,8 @@ Ref: https://en.wikipedia.org/wiki/Blackjack#Rules_of_play_at_casinos
 
 ############### Our Blackjack House Rules #####################
 
-## The deck is unlimited in size. 
-## There are no jokers. 
+## The deck is unlimited in size.
+## There are no jokers.
 ## The Jack/Queen/King all count as 10.
 ## The the Ace can count as 11 or 1.
 ## Use the following list as the deck of cards:
@@ -128,14 +128,14 @@ def show_hand(current_player, is_dealer=False):
 
 # "import" art module
 logo = r"""
-.------.            _     _            _    _            _    
-|A_  _ |.          | |   | |          | |  (_)          | |   
+.------.            _     _            _    _            _
+|A_  _ |.          | |   | |          | |  (_)          | |
 |( \/ ).-----.     | |__ | | __ _  ___| | ___  __ _  ___| | __
 | \  /|K /\  |     | '_ \| |/ _` |/ __| |/ / |/ _` |/ __| |/ /
-|  \/ | /  \ |     | |_) | | (_| | (__|   <| | (_| | (__|   < 
+|  \/ | /  \ |     | |_) | | (_| | (__|   <| | (_| | (__|   <
 `-----| \  / |     |_.__/|_|\__,_|\___|_|\_\ |\__,_|\___|_|\_\\
-      |  \/ K|                            _/ |                
-      `------'                           |__/           
+      |  \/ K|                            _/ |
+      `------'                           |__/
 """
 
 # start new game
@@ -218,8 +218,15 @@ while not game_over:
         # handle new card from a 'hit'
         if len(dealer['cards']) > num_cards:
             num_cards += 1
-            print("Dealer hits...")
-            print(f"Dealer received: {dealer['cards'][-1]}\n")
+            # print(f"\nDEBUG: LEN={len(dealer['cards'][2:])} | "
+            #      f"TYPE={type(dealer['cards'][2:])}\n")
+            for hit_card in dealer['cards'][2:]:
+                # print("Dealer cannot stand under 17!")
+                print("Dealer hits...")
+                print(f"Dealer received: {hit_card}")
+                print("Dealer's current score is: "
+                      f"{sum(dealer['cards'][:2]) + hit_card}\n"
+                      )
 
         # update total
         dealer['total'] = sum(dealer['cards'])
