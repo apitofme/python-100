@@ -70,16 +70,16 @@ def refresh_display():
 
 # GAME FUNCTIONS >>
 def deal_card():
-    """deal a single card to a player/dealer given"""
+    """returns a random card from the deck"""
     # simplified form, but even odds
     # return random.randint(2, 11)
     # corrected odds for blackjack
-    cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-    return random.choice(cards)
+    deck = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+    return random.choice(deck)
 
 
 def deal_cards(count=2):
-    """deal the given number of cards, returns a List"""
+    """deals the given number of cards and returns them as a List"""
     cards = []
     for _ in range(1, count+1):
         cards.append(deal_card())
@@ -87,8 +87,7 @@ def deal_cards(count=2):
 
 
 def create_player():
-    """create a new player (as a dictionary)
-    WITH cards already dealt!"""
+    """returns a new player (with cards) as a Dictionary!"""
     return {'cards': deal_cards(), 'bust': False}
 
 
