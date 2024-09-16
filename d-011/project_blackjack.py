@@ -71,7 +71,11 @@ def refresh_display():
 # GAME FUNCTIONS >>
 def deal_card():
     """deal a single card to a player/dealer given"""
-    return random.randint(2, 11)
+    # simplified form, but even odds
+    # return random.randint(2, 11)
+    # corrected odds for blackjack
+    cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+    return random.choice(cards)
 
 
 def deal_cards(count=2):
@@ -223,10 +227,10 @@ while not game_over:
             for hit_card in dealer['cards'][2:]:
                 # print("Dealer cannot stand under 17!")
                 print("Dealer hits...")
-                print(f"Dealer received: {hit_card}")
-                print("Dealer's current score is: "
-                      f"{sum(dealer['cards'][:2]) + hit_card}\n"
-                      )
+                print(f"Dealer received: {hit_card}\n")
+                # print("Dealer's current score is: "
+                #      f"{sum(dealer['cards'][:2]) + hit_card}\n"
+                #      )
 
         # update total
         dealer['total'] = sum(dealer['cards'])
