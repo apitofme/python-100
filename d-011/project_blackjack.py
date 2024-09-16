@@ -129,6 +129,20 @@ def show_hand(current_player, is_dealer=False):
     print(f"{pd} score is: {current_player['total']}\n")
 
 
+def play_again(response=False):
+    """ask user to play again; returns a Boolean"""
+    while str(response) not in "yn":
+        response = input(
+            "Would you like to play again? "
+            "(Type 'y' to play again, type 'n' to quit): "
+        ).lower()
+
+    if response == 'y':
+        return True
+
+    return False
+
+
 # "import" art module
 logo = r"""
 .------.            _     _            _    _            _
@@ -195,19 +209,12 @@ while not game_over:
 
         print("Sorry you BUST. You LOSE!\n")
 
-        again = False
-        while str(again) not in "yn":
-            again = input(
-                "Would you like to play again? "
-                "(Type 'y' to play again, type 'n' to quit): "
-            ).lower()
-
         # NOT playing again >>
-        if again == 'n':
+        if not play_again():
             print("Thanks for playing!")
             # END GAME!!
             break  # game_over = True
-
+        # else...
         # NEW GAME >>
         player, dealer = new_game()
         # loop back and start again
@@ -259,19 +266,11 @@ while not game_over:
     if dealer['bust']:
         print("The dealer BUST. You WIN!\n")
 
-        again = False
-        while str(again) not in "yn":
-            again = input(
-                "Would you like to play again? "
-                "(Type 'y' to play again, type 'n' to quit): "
-            ).lower()
-
-        # NOT playing again >>
-        if again == 'n':
+        if not play_again():
             print("Thanks for playing!")
             # END GAME!!
             break  # game_over = True
-
+        # else...
         # NEW GAME >>
         player, dealer = new_game()
         # loop back and start again
@@ -292,19 +291,11 @@ while not game_over:
         print("Sorry, you LOSE!\n")
 
     # FINALLY >> PLAY AGAIN?
-    again = False
-    while str(again) not in "yn":
-        again = input(
-            "Would you like to play again? "
-            "(Type 'y' to play again, type 'n' to quit): "
-        ).lower()
-
-    # NOT playing again >>
-    if again == 'n':
+    if not play_again():
         print("Thanks for playing!")
         # END GAME!!
         break  # game_over = True
-
+    # else...
     # NEW GAME >>
     player, dealer = new_game()
     # loop back and start again
