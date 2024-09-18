@@ -88,22 +88,27 @@ def guessing_game():
     """Main game loop"""
     refresh_display()
     print("Welcome to the number guessing game!")
+
     attempts_left = get_difficulty()
     target = get_random_number()
     print("I'm thinking of a number between 1 and 100...")
     print(f"Try to guess it in less than {attempts_left} attempts! ;)")
+
     win = False
-    while not win and attempts_left > 0:
+    while attempts_left > 0:
         guess = get_player_guess()
-        # update the attempt counter now so that the output below is correct
+        # update the attempt counter NOW so that the output below is correct
         attempts_left -= 1
 
         if guess == target:
             win = True
-        elif guess > target:
+            break
+
+        if guess > target:
             print("Too high.")
         elif guess < target:
             print("Too low.")
+
         print(f"- You have {attempts_left} more attempts")
 
     if win:
