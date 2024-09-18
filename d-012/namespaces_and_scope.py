@@ -15,7 +15,8 @@ on 3rd-party services (such as "repl.it"). In an effort to move away from
 these services, the course was refactored to encourage using the JetBrains
 "PyCharm" IDE from the get-go.
 """
-
+# >> Pylint clean-up for this file
+# pylint: disable=redefined-outer-name,global-statement
 """
 L.87 - Namespaces: Local vs Global
 
@@ -85,7 +86,9 @@ In Python, any variable defined inside a block-statement (e.g. IF statements,
 FOR and WHILE loops) will have the same scope as that of it's enclosing block.
 """
 # For example:
-if 3 > 2:
+a = 3
+b = 2
+if a > b:
     a_variable = 10
 
 # 'a_variable' is still available at the global scope
