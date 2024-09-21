@@ -178,4 +178,104 @@ written -- Thinking like a Computer! =D
 """
 L.97 - Fixing Errors (and Watching for Red Underlines)
 
+These next tips should be obvious...
+
+If the editor or console is giving you an error, fix it before continuing!
+
+Most code editors will attempt to predict potential errors, typically marking
+them with a wavy red underline (like spelling errors in a Word Processor).
+These are easier to deal with since you'll be able to see the line, or part
+of code, which is broken. They will also often provide extra information in
+a pop-up tooltip, when you hover over the highlighted error.
+
+However, not all errors are able to be predicted by editors so it's is always
+worth running your code from time to time to test functionality and ensure
+things are working as expected. Remember that some errors may only occur with
+certain (often unexpected) input values. For example, consider the code below:
+"""
+age = int(input("How old are you? "))
+"""
+This code may seem simple enough, but what happens if you enter the *word*
+for a number, instead of numerical characters -- e.g. "fifteen", not 15!
+
+Well, the 'int' conversion function can only handle strings of numerical
+characters, so the above example would cause the following error:
+- "ValueError: invalid literal for int() with base 10: 'fifteen'"
+
+The easiest way to fix this error, or prevent it from happening, is to tell
+the user to only enter numerical characters. We should probably also try to
+enforce this, with some kind or check or validation in our code, to ensure
+that we only pass a valid string to the conversion function. This process is
+called "input validation". You should always strive to implement some form of
+input validation whenever asking for input from a user.
+
+One way to approach this is to try to 'catch' the error with code. We can do
+this by introducing you to a statement pair/group which we haven't really
+seen or used before, the TRY/EXCEPT block. These provide us with the means to
+*try* a section of potentially 'dangerous' code, and then provide alternative
+code-blocks to run if/when an "exception" (i.e. error) occurs. The statement
+permits any number of EXCEPT blocks, allowing us to define different blocks
+of code to run for different exceptions, optionally ending with a 'catch-all'
+block. -- In effect these behave in a similar way to IF/ELIF/ELSE blocks.
+
+Let's implement this now to address the potential risk for invalid input
+from our code before:
+"""
+try:
+    # First we put the risky code in the TRY block
+    age = int(input("How old are you? "))
+except ValueError:
+    # Then we can 'catch' the anticipated error in the EXCEPT block
+    # by specifying the type of exception we want to handle
+    print("Please limit your input to numerical characters.")
+    # We could then prompt for input again...
+    age = int(input("How old are you? "))
+    # Please realise however that if the user enters invalid input again
+    # this will cause another exception here, which is NOT caught/handled!
+"""
+Now we have our input we can do something with it...
+"""
+# Like this
+if age < 18:
+    print("Sorry you can't drive at age {age}")
+"""
+...but what happens when you run this code though?
+-- Yep, not what we wanted/expected!
+
+We forgot to make it an 'f-string', so the variable inside the curly-braces
+was not converted to it's value, meaning we just got the literal text "{age}"
+instead of the number.
+
+This is to demonstrate that not all errors are immediately identifiable.
+Sometimes it takes an unexpected input, or unanticipated situation before a
+bug becomes apparent. These can be the most frustrating bugs to solve because
+technically the code is valid, and there is no error exception. So in these
+cases we can't get any help from the editor, and there is no error message in
+the console to help us either. It is down to us to understand what's
+happening, read through the code to try to identify the problem, and fix it.
+"""
+if age < 18:
+    print(f"Sorry you can't drive at age {age}")
+    # We fixed this now by making it an f-string!
+"""
+If we were new to programming and/or Python though, and didn't know about
+f-strings, then this would've been a very difficult issue to debug!
+
+This is where experience pays off. So learning, increasing your knowledge and
+understanding of Python, and programming in general, as well as fixing more
+bugs and errors as you get them, will all add up to help you become, not just
+a better programmer, but better at debugging too.
+
+So test your code, test other people's code, play around with exercises,
+change variables and break code, just to practice fixing it. Maybe go online
+and help other people out by answering questions on Stack Overflow, Discord
+channels and Reddit sub-groups. All of this will help to hone your debugging
+skills, making it easier for you to debug your own code down the line, as
+well as make you a better programmer overall. -- Good Luck!!
+"""
+
+"""
+L.98 - Squash Bugs with a print() Statement
+
+
 """
