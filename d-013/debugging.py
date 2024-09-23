@@ -277,5 +277,274 @@ well as make you a better programmer overall. -- Good Luck!!
 """
 L.98 - Squash Bugs with a print() Statement
 
+When it comes to debugging, the 'print()' function isn't just a programmer's
+friend, it's our best friend! It is the thing you will find yourself using
+the most, both while programming (in general) and especially when debugging.
 
+So let's jump in to a piece of code, that may or may not need some debugging
+detective work to figure out what is going wrong...
+
+Here is a little program which calculates the number of words in a book.
+First we initialise the counter to zero, then we ask for the number of pages
+in the book, and the number of words per page. It then multiplies these
+numbers together to get the total number of words, which it then prints out.
+"""
+words_per_page = 0
+pages = int(input("Number of pages: "))
+words_per_page == int(input("Number of words per page: "))
+total_words = pages * words_per_page
+print(total_words)
+"""
+Unfortunately, when we run this program and input some test values (e.g. 50
+pages, 250 wpp), the total printed out is 0 (zero) ... but why?
+
+Let's go ahead and use our reliable friend 'print()' to try to figure out
+what is going wrong...
+
+We know the formula for the calculation is correct, so let's try checking
+what the values we're actually plugging in to that calculation are. We can
+print out each variable after we have taken the appropriate input.
+"""
+words_per_page = 0
+pages = int(input("Number of pages: "))
+print(f"Pages: {pages}")
+words_per_page == int(input("Number of words per page: "))
+print(f"Words per page: {words_per_page}")
+total_words = pages * words_per_page
+print(total_words)
+"""
+This time when we run the code (with the same test values) we can see that
+the value captured for the first variable 'pages' is correct as '50', but
+the value for the second variable 'words_per_page' is coming back as '0'
+instead of '250'.
+
+So the problem must be something to do with the line that captures the input
+for that value. With this knowledge we should be able to find and fix the bug
+in our code...
+
+You may have seen it already, or your editor may have highlighted it for you.
+In the case of the latter, you should be able to hover over the line in your
+editor and see the description for the potential error. Something like...
+- Expression "words_per_page ...[edit]" is assigned to nothing
+This message informs us that the line is seen by the Python interpreter as
+an "expression" (i.e. a comparative evaluation) rather than an *assignment*.
+
+For the rest of us, and those of us with a good eye, you can see that the
+line has a double equals-sign ('=='), which we should remember is used in
+comparative tests to test if the value on the left is 'equal' to the value
+on the right. This is NOT what we wanted to do! What we want is to assign the
+value to a variable name, which we know is done using a single equals-sign.
+
+Let's go ahead and fix that now:
+"""
+words_per_page = 0
+pages = int(input("Number of pages: "))
+words_per_page = int(input("Number of words per page: "))
+total_words = pages * words_per_page
+print(f"Pages: {pages}")
+print(f"Words per page: {words_per_page}")
+print(f"Total number of words: {total_words}")
+"""
+So there we go!
+
+Bugs like this happen all the time. A simple typo when we accidentally hit
+the wrong key, or press a key twice, whilst in a rush to get our code out
+from our head and on to the screen. -- Easy enough to fix now that our friend
+'print()' has helped us to check our assumptions of the code.
+"""
+
+"""
+L.99 - Bringing out the BIG Gun: Using a Debugger
+
+The 'print()' function may be our debugging BFF when it comes to helping us
+catch relatively simple errors, and when working with smaller sections of
+code, by ourselves. However, it becomes a bit cumbersome and inefficient
+to use when working on larger, more complex projects. Especially given that
+it is not particularly desirable to have 'print()' statements littering our
+code all over the place, clogging our console with lines of debugging output,
+most of which should probably never be seen by the end-user.
+
+As the scale and complexity of our projects increases, or we find ourselves
+collaborating on projects with other programmers, we may need the help of
+something a bit more powerful. Something which allows us to interact with,
+and analyse, our code in 'real-time' as it is executed, without the need to
+add lines of code to our files, just for debugging purposes. This is where
+the "Debugger" tool steps in to the ring.
+
+Our starting code for this lesson is a function, called 'mutate', which
+takes a List of integer numbers as input, and prints out a different List
+at the end.
+
+Inside the function, the output List starts out empty, and a local variable
+is initialised to '0' (zero). The function then loops through each number in
+the input List, doubling it, then adding a random whole-number between
+1 and 3. The result of this is stored in the local variable, and later
+appended to the output List. At the end of the function the output List
+is printed using the 'print()' statement.
+"""
+# NOTE since we already imported 'random.randint' above, we'll skip this
+# BUT, if we wanted to use it here...
+# pylint: disable=reimported
+# from random import randint  # nopep8
+
+# Similarly, since we haven't actually created the 'maths' module the video
+# refers to we'll skip the import and just re-create the function below...
+# import maths  # nopep8
+
+
+def add(n1, n2):
+    """Add two simple numbers together and return the result"""
+    return n1 + n2
+
+
+def mutate(a_list):
+    """Modifies the numbers in a given List by doubling the number,
+    then adding a random number between 1 and 3;
+    Adding the results to a new List before printing the new List"""
+    b_list = []
+    new_num = 0
+    for a_num in a_list:
+        new_num = a_num * 2
+        new_num += randint(1, 3)
+        # new_num = maths.add(new_num, a_num)
+        # Replaced above with line using local function instead of module:
+        new_num = add(new_num, a_num)
+    b_list.append(new_num)
+    print(b_list)
+
+
+mutate([1, 2, 3, 5, 8, 13])
+"""
+When we run this code however, rather than a List of numbers, we get a single
+value output. This is not what we want!
+
+In order to fix this we'e going to use a Python Debugger tool, built-in (or
+installable as an extension) to your Programming-IDE (i.e. code editor).
+Thankfully these work in pretty much the same way, regardless of your
+specific IDE, so a lot of these tips will be similar and reusable across a
+range of development environments.
+
+In order to use the Debugging Tool we need to create something called a
+"break-point". This is the point at which the execution of the code, at
+run-time, will be handed over to the control of the Debugger for us to
+interact with.
+
+If you hover your mouse over the line-numbers in the 'gutter', down the side
+of your code, you should see a red dot appear next to it. This dot indicates
+which line will trigger the break-point. Then, when we click on the dot the
+break-point is registered, and the dot stays next to that line to indicate
+where the Debugger will kick in.
+
+Once we have a break-point we can run the code in 'debug' mode using the
+'Run and Debug' icon (this usually has a little bug symbol on it), or with
+the relevant option under the 'Run' tab in the menu-bar.
+
+When you run your code with the debugger you will typically see a console
+window appear, as well as a debugging information panel. This displays the
+current state of your program as you run through it, including all defined
+variables and their values, which are kept updated in real-time.
+
+Effectively, once triggered by a break-point, the debugging tool halts the
+normal execution of your code, and then allows you to walk through your code
+line-by-line, controlling the progress in a few key ways (represented by the
+controls on the 'Debugging Toolbar' that appears). These are typically:
+
+    1.  "Continue": Continues 'normal' execution of the code, processing
+        additional lines automatically, without pausing or prompting, until
+        another break-point is hit, an error occurs, or the end of the file
+        is reached.
+        Note: This button may also double-up as a "Pause" function, which
+        pauses 'normal' code execution, switching back to code inspection and
+        line-by-line execution, as if we'd hit another break-point.
+    
+    2.  "Step-Over": Runs the current line of code in it's entirety. Execution
+        is processed in the background, with no further interaction required
+        until the next line is reached -- i.e. it 'steps-over' the specifics
+        and complexities of executing that line.
+        We use this when we don't really care about *how* the line of code is
+        executed (or where that code resides), so long as it *is* processed.
+        Execution halts again at the start of the next line.
+    
+    3.  "Step-Into": Causes the current line of code to be executed
+        step-by-step, literally, as it is seen by the Python interpreter.
+        Steps which require additional line(s) of code to be processed (e.g.
+        due to a function call) are also handled one at a time, in the order
+        of execution, using the same debugging controls, such that...
+        - 'stepping-over' any additional lines will allow those lines to be
+        executed in the background, without following the explicit process.
+        - 'stepping-into' any additional lines will follow the explicit
+        execution process for each step, which may traverse the code-tree,
+        local files, the Python Standard Library, or external modules, in a
+        cascade-like manner, eventually traversing back up the cascade as
+        each subsequent step completes. Execution is halted by the debug-tool
+        at each step, allowing for fine-grained control of the debug process.
+        - 'stepping-out' of any additional step allows the rest of the process
+        for that step to execute in the background, returning to the code that
+        initiated that step at the point where that step is complete. Halting
+        execution at the start of the next step, or at the start of the next
+        line when no more steps from the initiating line exist.
+
+    4.  "Step-Out": [Where a process has been 'stepped-into'...]
+        Any remaining execution for the current process is moved to, and
+        completed in, the background. Debugging execution control returns to
+        the point in the initiating line of code at which the sub-process is
+        complete, and the next step or line is pending.
+    
+    5.  "Restart": Terminates the current debugging session and restarts the
+        debugger for the current file, using the previous debug configuration.
+    
+    6.  "Stop": Terminates the current debugging session, and closes the
+        debug-tool.
+
+
+Ref: https://code.visualstudio.com/Docs/editor/debugging
+        
+
+By far one of the most useful features when using a Debugging Tool, is being
+able to see the values for all the different variables, at each step, as you
+walk through the code's execution line-by-line.
+
+Code inspection can also be useful, allowing you to follow the step-by-step
+execution of code as it passes into different functions, and sub-processes.
+Especially when working with multiple files; Or, if you are ever unsure of
+where a particular function is coming from, or how it has been implemented.
+
+
+>> Solution:
+
+Now that you understand how the debugger works, and have set a break-point,
+it's time to figure out why our code is returning a single number instead of
+a List.
+
+After stepping through the code with the debugger you should have realised
+that the only time a value is actually added to the output list is *after*
+the entire FOR loop has finished. This is the error, and explains why we 
+only get a single value (i.e. the last value processed) in the output.
+
+So, the line which append's the variable "new_num" to the List "b_list" needs
+to be placed *inside* the FOR loop, to ensure that each modified number is
+added to the List for output -- As shown below:
+"""
+# pylint: disable=function-redefined
+
+
+def mutate(a_list):
+    """Modifies the numbers in a given List by doubling the number,
+    then adding a random number between 1 and 3;
+    Adding the results to a new List before printing the new List"""
+    b_list = []
+    new_num = 0
+    for a_num in a_list:
+        new_num = a_num * 2
+        new_num += randint(1, 3)
+        new_num = add(new_num, a_num)
+        b_list.append(new_num)
+    print(b_list)
+
+
+mutate([1, 2, 3, 5, 8, 13])
+"""
+A simple indentation error meant that the append line was outside of the
+FOR loop when it needed to be inside it. When we run this code now it
+correctly prints out a list of 6 different numbers.
 """
