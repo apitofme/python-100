@@ -548,3 +548,99 @@ A simple indentation error meant that the append line was outside of the
 FOR loop when it needed to be inside it. When we run this code now it
 correctly prints out a list of 6 different numbers.
 """
+
+"""
+L.100 - Final Debugging Tips
+
+In the past few lessons we've covered the main tips, tricks and tools we can
+use to help us debug our programs, because no matter good a programmer we are,
+or become, there will always be bugs to find and fix.
+
+To recap quickly, these were:
+1. Describe the Problem
+2. Reproduce the Bug
+3. Play Computer
+4. Fix the Errors
+5. Print is Your Friend
+6. Use a Debugger
+
+The last handful of tips, that come from experience as well as good advice,
+are as follows...
+
+7. Take a Break:
+
+Programmers often let themselves get in to the nasty habit of staring blankly
+at a screen full of code, banging their head against the proverbial brick
+wall, trying to fix their code. We have a strange way of convincing ourselves
+that if we stare at a problem for long enough we'll be able to find a
+solution. When what we should really do is take a break!
+
+Give your brain a rest and go and make a cup of tea or coffee, go for a
+walk, take a nap, or just go to bed, get some sleep, and tackle it again
+fresh tomorrow. Sometimes the best thing you can do is get away from your
+screen, let your brain switch tasks and think about something else for a
+while, then come back to the problem with a fresh, or at least refreshed,
+pair of eyes.
+
+8. Ask a Friend:
+
+If you've been struggling with a bug for a while, and you've given yourself
+a healthy break away from the problem but you still can't see it or work it
+out, then ask a friend for help.
+
+Probably not our trusty friend `print()`, but a real human. Another developer,
+a fellow student, people on you favourite Python Discord channel or Reddit
+group, or by posting a question on Stack Exchange.
+
+When we've been staring at the same code for so long, going over and over it
+time and again, so much so that our brain starts to mentally skip over bits,
+a fresh set of eyes on a problem can often see things that we've managed to
+give ourselves a mental blind-spot for.
+
+Most developers are overly self-critical, and rarely receive much if any praise
+for their efforts, especially from themselves. So don't worry, reaching out to
+someone to ask for their help will likely give them a much needed ego boost.
+Even if they don't actually find or fix the problem for you, just talking
+through the problem with someone can often help to jog your own brain in to
+gear, or help to clear those mental blind-spots and give you a sudden moment
+of clarity.
+
+9. Run Your Code Often:
+
+By running our code regularly we can test our functionality incrementally, as
+we go along, which often makes it easier to find and fix little bugs quickly.
+If we wait until we've written a whole bunch of code before we test it, we
+could end up with numerous errors and bugs to fix. Not only can this be a bit
+overwhelming to tackle all in one go, but it also makes it a lot harder to
+work out exactly what is going on with our code.
+
+If you do end up in a situation where you have several bugs and errors, all
+happening at the same time, then try to tackle and fix them one at a time.
+Test each solution thoroughly to be sure it does what you expect it to,
+before moving on to the next. This way you build up confidence in the
+reliability of your code as you work through the bugs. This ensures that,
+where any section relies on another part of your code (such as a function),
+which you've already covered and tested, then you can be sure that *that*
+part works as intended, and is not contributing to the current bug.
+
+10. Ask on Stack Overflow:
+
+Stack Overflow is one of the most powerful tools in any developer's tool-belt.
+Unfortunately, as a resource and a "Question & Answer" platform, it is one
+that is often misunderstood and, if not exactly 'abused', then certainly all
+too often misused.
+
+All of the sites on the Stack Exchange network should, first and foremost, be
+used to **SEARCH** for an answer to an issue or bug you're having. Then, only
+when you have exhausted all other avenues and resources to find a solution,
+should you perhaps go ahead and post a question here. Think of these sites
+more as Wiki's (rather than generic Q&A channels), where ideally each
+'Question' is unique enough to warrant it's inclusion in the community's
+database.
+
+
+All together, these tips should help you to focus on, improve, and level-up
+your debugging skills. So practice, refer back here when you need to, and
+remember that all programmers make mistakes ... but good programmers know how
+to find and fix them, so keep these skills sharp, go forth and debug!
+"""
