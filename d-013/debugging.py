@@ -289,6 +289,7 @@ First we initialise the counter to zero, then we ask for the number of pages
 in the book, and the number of words per page. It then multiplies these
 numbers together to get the total number of words, which it then prints out.
 """
+# pylint: disable=expression-not-assigned
 words_per_page = 0
 pages = int(input("Number of pages: "))
 words_per_page == int(input("Number of words per page: "))
