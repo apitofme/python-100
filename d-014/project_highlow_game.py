@@ -99,7 +99,7 @@ def get_random_entity_id():
         entity_id = get_random_id()
         if entity_id not in recent_entity_ids:
             recent = False
-    easy_debug(entity_id, "(fnc:get_random_entity_id) EntityID:")
+    # easy_debug(entity_id, "(fnc:get_random_entity_id) EntityID:")
     return entity_id
 
 
@@ -120,7 +120,7 @@ def display_entity_info(entity):
 
 def display_game_round():
     """Prints the display output for the current game round"""
-    refresh_display()
+    # refresh_display()
     for i, data_id in enumerate(game_round):
         # easy_debug(i, "(fnc:display_game_round) Loop counter:")
         display_entity_info(get_entity_data(data_id))
@@ -140,7 +140,7 @@ def get_player_choice():
             valid = True
         else:
             print("Please enter only 1 or 2!")
-    return int(choice) - 1
+    return game_round[int(choice) - 1]
 
 
 def get_comparison_option():
@@ -168,7 +168,7 @@ def display_win():
 
 def display_lose():
     """Displays the current game score if the player lost"""
-    print(f"Sorry, you got it wrong! Final score: {current_round}")
+    print(f"Sorry, you got it wrong! Final score: {current_round}\n")
 
 
 def get_highest():
@@ -208,43 +208,85 @@ def check_answer():
     return False
 
 
+def play_again():
+    """Ask player if they would like to play again.
+    Validate the input.
+    Returns a Boolean"""
+    response = False
+    while not response:
+        response = input("Would you like to play again? "
+                         "(Type 'y' to play again, type 'n' to quit): "
+                         ).lower()
+        if response not in ['y', 'n']:
+            print("Sorry, please type 'y' or 'n'!")
+            response = False
+
+    if response == 'y':
+        return True
+
+    return False
+
+
+##
+# Start game:
+##
+ezdbg = []
 # Initialise:
+refresh_display()
 recent_entity_ids = []
 current_round = 0
-refresh_display()
 
-# Start game:
 # 1. Get a (first) random ID
-# ?? start_id = get_random_entity_id()
+first_id = get_random_entity_id()
 
-# 2. Get a second random ID
-# !! game_round = new_round(start_id)
-game_round = new_round()
-easy_debug(game_data[game_round[0]], "First:")
-# 3. Display info: First vs Second
-display_game_round()
+# Repeatable Game Loop ('main')
+play = True
+while play:
+    # Handle yo' business
+    refresh_display()
+    if current_round > 0:
+        display_win()
 
-# 4. Ask player to guess which has the most followers
-player_choice = game_round[get_player_choice()]
-easy_debug(player_choice, "Player's choice [ID]:")
+    if ezdbg:
+        easy_debug(ezdbg)
 
-# 5. Check the player's guess
-correct = check_answer()
-
-# 6. If player was right, play on:
-#    - i.e. select a new ID to play against their answer
-if correct:
     current_round += 1
-    refresh_display()
-    display_win()
-    game_round = new_round(game_round[1])
+    print(f">> Round {current_round}...\n")
 
-# 7. If player was wrong, game over:
-#    - ask to play again?
-else:
-    refresh_display()
-    display_lose()
-    # ask player to play again?
+    # 2. Get a second random ID
+    game_round = new_round(first_id)
 
-# 8. Keep track of score (i.e. How many rounds guessed right?)
-# - This is taken care of with the `current_round` variable!
+    # 3. Display info: First vs Second
+    display_game_round()
+
+    # 4. Ask player to guess which has the most followers
+    player_choice = get_player_choice()
+    easy_debug(player_choice, "Player's choice [ID]:")
+
+    # 5. Check the player's guess
+    correct = check_answer()
+
+    # 6. If player was right, play on:
+    #    - i.e. select a new ID to play against their answer
+    if correct:
+        first_id = game_round[1]
+
+    # 7. If player was wrong, game over:
+    #    - ask to play again?
+    else:
+        refresh_display()
+        display_lose()
+        if play_again():
+            current_round = 0
+            recent_entity_ids = []
+            first_id = get_random_entity_id()
+        else:
+            play = False
+
+    # 8. Keep track of score (i.e. How many rounds guessed right?)
+    # - This is taken care of with the `current_round` variable!
+    ezdbg = []
+    ezdbg.append([recent_entity_ids, "Recent IDs:"])
+    ezdbg.append([game_round, "Current IDs:"])
+
+print("Thank you for playing!")
