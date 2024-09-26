@@ -28,7 +28,7 @@ from highlow_game_data import game_data
 
 # CONSTANTS:
 LOGO = r"""
- /\  /(_) __ _| |__   ___ _ __  \ \ \ 
+  /\  /(_) __ _| |__   ___ _ __  \ \ \ 
  / /_/ / |/ _` | '_ \ / _ \ '__|  \ \ \
 / __  /| | (_| | | | |  __/ |     / / /
 \/ /_/ |_|\__, |_| |_|\___|_|    /_/_/ 
@@ -44,6 +44,7 @@ VERSUS = r"""
 | |/ (__  ) 
 |___/____/  
 """
+GAME_DATA_LENGTH = len(game_data)
 MAX_LENGTH_OF_RECENT = 5
 
 
@@ -64,41 +65,107 @@ def easy_debug(obj, msg=""):
     print(f" - {msg} {obj}\n")
 
 
-def update_recent(latest, recent, max_length=MAX_LENGTH_OF_RECENT):
-    """Updates a given list of the most recently used entities.
+def update_recent_entities(latest, max_length=MAX_LENGTH_OF_RECENT):
+    """Updates the GLOBAL list of the most recently used entities!
     When more than MAX_LENGTH items: Removes the oldest item first, then...
-    Appends the index for the latest item onto the list
+    Appends the index for the latest item onto the list.
     """
-    easy_debug(recent, "(fnc:update_recent) Entry List:")
-    current_length = len(recent)
+    easy_debug(recent_entity_ids, "(fnc:update_recent) Entry List:")
+    current_length = len(recent_entity_ids)
     if current_length == max_length:
-        recent = [recent[i] for i in range(1, max_length)]
+        recent = [recent_entity_ids[i] for i in range(1, max_length)]
+    else:
+        recent = recent_entity_ids
     recent.append(latest)
     easy_debug(recent, "(fnc:update_recent) Exit List:")
     return recent
 
 
-def get_next_data(recent):
-    """Returns a randomly selected entity from the list of game data"""
-    selected = randint(0, len(game_data)-1)
-    while selected in recent:
-        selected = randint(0, len(game_data)-1)
-    recent = update_recent(selected, recent)
-    return (recent, [selected, game_data[selected]])
+def get_random_id():
+    """Returns a random index number for the `game_data` List"""
+    return randint(0, GAME_DATA_LENGTH - 1)
+
+
+def get_random_entity_id():
+    """Returns a randomly selected EntityID,
+    that is NOT in the given list of recently used IDs"""
+    recent = True
+    while recent:
+        entity_id = get_random_id()
+        if entity_id not in recent_entity_ids:
+            recent = False
+    easy_debug(entity_id, "(fnc:get_random_entity_id) EntityID:")
+    return entity_id
+
+
+def get_entity_data(index):
+    """Returns the Dictionary at the given index from the `game_data` List"""
+    return game_data[index]
 
 
 def display_entity_info(entity):
     """Prints out the entity information to be displayed.
-    Expects a Dictionary comprising the following fields:
+    Expects a Dictionary comprising the following Keys:
     - 'name', 'description', 'country', 'follower_count'
     """
-    print(f"Name: {entity.name}")
-    print(f"Description: {entity.description}")
-    print(f"Country: {entity.country}")
+    print(f"Name: {entity['name']}")
+    print(f"Description: {entity['description']}")
+    print(f"Country: {entity['country']}")
 
 
-recent_selections = []
+def display_game_round(one, two):
+    """Prints the display output for the current game round"""
+    refresh_display()
+    display_entity_info(one)
+    print(VERSUS)
+    display_entity_info(two)
+
+
+def get_player_choice():
+    """Prompts the player to select their choice for this round,
+    Takes their input and validates it,
+    Returns their choice as an EntityID [Integer]"""
+    valid = False
+    while not valid:
+        print("\nWho has more followers?")
+        choice = input("- Enter 1 or 2: ")
+        if choice in ['1', '2']:
+            valid = True
+        else:
+            print("Please enter only 1 or 2!")
+    return int(choice)
+
+
+def get_comparison_option():
+    """Returns a Tuple containing a single Entity as (ID, Data)"""
+    entity_id = get_random_entity_id()
+    entity_data = get_entity_data(entity_id)
+    # pylint: disable-next=global-statement
+    global recent_entity_ids
+    recent_entity_ids = update_recent_entities(entity_id)
+    return (entity_id, entity_data)
+
+
+# Initialise:
+recent_entity_ids = []
 refresh_display()
 
-recent_selections, option_one = get_next_data(recent_selections)
-recent_selections, option_two = get_next_data(recent_selections)
+# Start game:
+compare_this = get_comparison_option()
+against_this = get_comparison_option()
+
+easy_debug(compare_this, "Compare Entity 1:")
+
+display_game_round(compare_this[1], against_this[1])
+player_choice = get_player_choice()
+
+if player_choice == 1:
+    if compare_this[1]['follower_count'] > against_this[1]['follower_count']:
+        print("Correct!")
+    else:
+        print("Sorry, you loose!")
+else:
+    if against_this[1]['follower_count'] > compare_this[1]['follower_count']:
+        print("Correct!")
+    else:
+        print("Sorry, you loose!")
