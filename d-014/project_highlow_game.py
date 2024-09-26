@@ -40,6 +40,7 @@ LOGO = r"""
  \_\_\ \____/\___/ \_/\_/ \___|_|      
 """
 VERSUS = r"""
+ _   _______
 | | / / ___/
 | |/ (__  ) 
 |___/____/  
@@ -62,7 +63,11 @@ def refresh_display():
 def easy_debug(obj, msg=""):
     """Easy print objects for debugging"""
     print("\nDebug:")
-    print(f" - {msg} {obj}\n")
+    if isinstance(obj, list):
+        for o, m in obj:
+            print(f" - {m} {o}")
+    else:
+        print(f" - {msg} {obj}\n")
 
 
 def update_recent_entities(latest, max_length=MAX_LENGTH_OF_RECENT):
@@ -113,18 +118,20 @@ def display_entity_info(entity):
     print(f"Country: {entity['country']}")
 
 
-def display_game_round(one, two):
+def display_game_round():
     """Prints the display output for the current game round"""
     refresh_display()
-    display_entity_info(one)
-    print(VERSUS)
-    display_entity_info(two)
+    for i, data_id in enumerate(game_round):
+        # easy_debug(i, "(fnc:display_game_round) Loop counter:")
+        display_entity_info(get_entity_data(data_id))
+        if i == 0:
+            print(VERSUS)
 
 
 def get_player_choice():
     """Prompts the player to select their choice for this round,
     Takes their input and validates it,
-    Returns their choice as an EntityID [Integer]"""
+    Returns an Integer (list index for choice in current `game_round`)"""
     valid = False
     while not valid:
         print("\nWho has more followers?")
@@ -133,7 +140,7 @@ def get_player_choice():
             valid = True
         else:
             print("Please enter only 1 or 2!")
-    return int(choice)
+    return int(choice) - 1
 
 
 def get_comparison_option():
@@ -146,26 +153,98 @@ def get_comparison_option():
     return (entity_id, entity_data)
 
 
+def new_round(first=False):
+    """Create a new comparison round"""
+    if not first:
+        first = get_random_entity_id()
+    second = get_random_entity_id()
+    return [first, second]
+
+
+def display_win():
+    """Displays the current game score if the player won the last round"""
+    print(f"Correct! Current score: {current_round}")
+
+
+def display_lose():
+    """Displays the current game score if the player lost"""
+    print(f"Sorry, you got it wrong! Final score: {current_round}")
+
+
+def get_highest():
+    """Returns the index ID of the entity with the highest follower count
+    for the current round"""
+    debug_me = []
+    round_data = []
+    for data_id in game_round:
+        round_data.append([data_id, game_data[data_id]])
+
+    debug_me.append([
+        [round_data[0][0], round_data[0][1]['follower_count']],
+        "(fnc:get_highest) D1:"
+    ])
+    debug_me.append([
+        [round_data[1][0], round_data[1][1]['follower_count']],
+        "(fnc:get_highest) D2:"
+    ])
+
+    if round_data[0][1]['follower_count'] > round_data[1][1]['follower_count']:
+        highest = round_data[0][0]
+    else:
+        highest = round_data[1][0]
+
+    debug_me.append([highest, "(fnc:get_highest) Highest ID:"])
+    easy_debug(debug_me)
+
+    return highest
+
+
+def check_answer():
+    """Checks if the Player's choice was correct
+    - i.e. has the highest number of followers
+    Returns a Boolean"""
+    if player_choice == get_highest():
+        return True
+    return False
+
+
 # Initialise:
 recent_entity_ids = []
+current_round = 0
 refresh_display()
 
 # Start game:
-compare_this = get_comparison_option()
-against_this = get_comparison_option()
+# 1. Get a (first) random ID
+# ?? start_id = get_random_entity_id()
 
-easy_debug(compare_this, "Compare Entity 1:")
+# 2. Get a second random ID
+# !! game_round = new_round(start_id)
+game_round = new_round()
+easy_debug(game_data[game_round[0]], "First:")
+# 3. Display info: First vs Second
+display_game_round()
 
-display_game_round(compare_this[1], against_this[1])
-player_choice = get_player_choice()
+# 4. Ask player to guess which has the most followers
+player_choice = game_round[get_player_choice()]
+easy_debug(player_choice, "Player's choice [ID]:")
 
-if player_choice == 1:
-    if compare_this[1]['follower_count'] > against_this[1]['follower_count']:
-        print("Correct!")
-    else:
-        print("Sorry, you loose!")
+# 5. Check the player's guess
+correct = check_answer()
+
+# 6. If player was right, play on:
+#    - i.e. select a new ID to play against their answer
+if correct:
+    current_round += 1
+    refresh_display()
+    display_win()
+    game_round = new_round(game_round[1])
+
+# 7. If player was wrong, game over:
+#    - ask to play again?
 else:
-    if against_this[1]['follower_count'] > compare_this[1]['follower_count']:
-        print("Correct!")
-    else:
-        print("Sorry, you loose!")
+    refresh_display()
+    display_lose()
+    # ask player to play again?
+
+# 8. Keep track of score (i.e. How many rounds guessed right?)
+# - This is taken care of with the `current_round` variable!
