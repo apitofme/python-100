@@ -28,22 +28,22 @@ from highlow_game_data import game_data
 
 # CONSTANTS:
 LOGO = r"""
-  /\  /(_) __ _| |__   ___ _ __  \ \ \ 
+  /\  /(_) __ _| |__   ___ _ __  \ \ \
  / /_/ / |/ _` | '_ \ / _ \ '__|  \ \ \
 / __  /| | (_| | | | |  __/ |     / / /
-\/ /_/ |_|\__, |_| |_|\___|_|    /_/_/ 
-          |___/                        
-  ____    __                           
- / / /   / /  _____      _____ _ __    
-/ / /   / /  / _ \ \ /\ / / _ \ '__|   
-\ \ \  / /__| (_) \ V  V /  __/ |      
- \_\_\ \____/\___/ \_/\_/ \___|_|      
+\/ /_/ |_|\__, |_| |_|\___|_|    /_/_/
+          |___/
+  ____    __
+ / / /   / /  _____      _____ _ __
+/ / /   / /  / _ \ \ /\ / / _ \ '__|
+\ \ \  / /__| (_) \ V  V /  __/ |
+ \_\_\ \____/\___/ \_/\_/ \___|_|
 """
 VERSUS = r"""
  _   _______
 | | / / ___/
-| |/ (__  ) 
-|___/____/  
+| |/ (__  )
+|___/____/
 """
 GAME_DATA_LENGTH = len(game_data)
 MAX_LENGTH_OF_RECENT = 5
@@ -67,22 +67,27 @@ def easy_debug(obj, msg=""):
         for o, m in obj:
             print(f" - {m} {o}")
     else:
-        print(f" - {msg} {obj}\n")
+        print(f" - {msg} {obj}")
+    print("\n")
 
 
 def update_recent_entities(latest, max_length=MAX_LENGTH_OF_RECENT):
-    """Updates the GLOBAL list of the most recently used entities!
+    """Updates the GLOBAL list of the most recently used entities.
     When more than MAX_LENGTH items: Removes the oldest item first, then...
     Appends the index for the latest item onto the list.
     """
-    easy_debug(recent_entity_ids, "(fnc:update_recent) Entry List:")
+    ezdbg.append([latest, "(fnc:update_recent) Latest ID:"])
+
     current_length = len(recent_entity_ids)
     if current_length == max_length:
         recent = [recent_entity_ids[i] for i in range(1, max_length)]
     else:
         recent = recent_entity_ids
     recent.append(latest)
-    easy_debug(recent, "(fnc:update_recent) Exit List:")
+    # NOTE: Have to use an F-String to debug so it passes the current value,
+    # rather than a reference to the variable, which is updated again before
+    # it get's printed out ... meaning BOTH values are shown both times!
+    ezdbg.append([f"{recent}", "(fnc:update_recent) Updated List:"])
     return recent
 
 
@@ -92,8 +97,8 @@ def get_random_id():
 
 
 def get_random_entity_id():
-    """Returns a randomly selected EntityID,
-    that is NOT in the given list of recently used IDs"""
+    """Returns a randomly selected EntityID from `game_data`,
+    ensuring that is NOT in the list of recently used IDs"""
     recent = True
     while recent:
         entity_id = get_random_id()
@@ -103,14 +108,9 @@ def get_random_entity_id():
     return entity_id
 
 
-def get_entity_data(index):
-    """Returns the Dictionary at the given index from the `game_data` List"""
-    return game_data[index]
-
-
 def display_entity_info(entity):
-    """Prints out the entity information to be displayed.
-    Expects a Dictionary comprising the following Keys:
+    """Prints out the information from the given `game_data` Item,
+    a Dictionary, comprising the following Keys:
     - 'name', 'description', 'country', 'follower_count'
     """
     print(f"Name: {entity['name']}")
@@ -119,11 +119,9 @@ def display_entity_info(entity):
 
 
 def display_game_round():
-    """Prints the display output for the current game round"""
-    # refresh_display()
+    """Generate the display output for the current game round"""
     for i, data_id in enumerate(game_round):
-        # easy_debug(i, "(fnc:display_game_round) Loop counter:")
-        display_entity_info(get_entity_data(data_id))
+        display_entity_info(game_data[data_id])
         if i == 0:
             print(VERSUS)
 
@@ -143,18 +141,9 @@ def get_player_choice():
     return game_round[int(choice) - 1]
 
 
-def get_comparison_option():
-    """Returns a Tuple containing a single Entity as (ID, Data)"""
-    entity_id = get_random_entity_id()
-    entity_data = get_entity_data(entity_id)
-    # pylint: disable-next=global-statement
-    global recent_entity_ids
-    recent_entity_ids = update_recent_entities(entity_id)
-    return (entity_id, entity_data)
-
-
-def new_round(first=False):
-    """Create a new comparison round"""
+def get_new_round(first=False):
+    """Creates a new game round with two `game_data` index IDs to compare.
+    Returns a List [id_1, id_2]"""
     if not first:
         first = get_random_entity_id()
     second = get_random_entity_id()
@@ -162,55 +151,39 @@ def new_round(first=False):
 
 
 def display_win():
-    """Displays the current game score if the player won the last round"""
-    print(f"Correct! Current score: {current_round}")
+    """Displays the 'won' message and current game score"""
+    print(f"Correct! Current score: {score}")
 
 
 def display_lose():
-    """Displays the current game score if the player lost"""
-    print(f"Sorry, you got it wrong! Final score: {current_round}\n")
+    """Displays the 'game over' message and final game score"""
+    print(f"Sorry, you got it wrong! Final score: {score}\n")
 
 
-def get_highest():
-    """Returns the index ID of the entity with the highest follower count
-    for the current round"""
-    debug_me = []
-    round_data = []
-    for data_id in game_round:
-        round_data.append([data_id, game_data[data_id]])
-
-    debug_me.append([
-        [round_data[0][0], round_data[0][1]['follower_count']],
-        "(fnc:get_highest) D1:"
-    ])
-    debug_me.append([
-        [round_data[1][0], round_data[1][1]['follower_count']],
-        "(fnc:get_highest) D2:"
-    ])
-
-    if round_data[0][1]['follower_count'] > round_data[1][1]['follower_count']:
-        highest = round_data[0][0]
+def get_correct_answer():
+    """Checks which option has the highest number of followers.
+    Returns an Integer [index ID]"""
+    if (
+        game_data[game_round[0]]['follower_count']
+        > game_data[game_round[1]]['follower_count']
+    ):
+        highest = game_round[0]
     else:
-        highest = round_data[1][0]
+        highest = game_round[1]
 
-    debug_me.append([highest, "(fnc:get_highest) Highest ID:"])
-    easy_debug(debug_me)
+    # ezdbg.append([game_data[game_round[0]], "(fnc:get_correct_answer) 1:\n"])
+    # ezdbg.append([game_data[game_round[1]], "(fnc:get_correct_answer) 2:\n"])
+    ezdbg.append([
+        f"{game_data[highest]['name']}; FC={
+            game_data[highest]['follower_count']}",
+        f"(fnc:get_correct_answer) Highest: ID={highest};"
+    ])
 
     return highest
 
 
-def check_answer():
-    """Checks if the Player's choice was correct
-    - i.e. has the highest number of followers
-    Returns a Boolean"""
-    if player_choice == get_highest():
-        return True
-    return False
-
-
 def play_again():
-    """Ask player if they would like to play again.
-    Validate the input.
+    """Asks the player if they would like to play again.
     Returns a Boolean"""
     response = False
     while not response:
@@ -231,62 +204,99 @@ def play_again():
 # Start game:
 ##
 ezdbg = []
-# Initialise:
-refresh_display()
+
+# Initialise Global Variables:
+# refresh_display()
 recent_entity_ids = []
 current_round = 0
-
-# 1. Get a (first) random ID
-first_id = get_random_entity_id()
+score = 0
+correct_answer = None
+# 1. Get a first random ID:
+first_id = False
+# We only need to initialise this to a FALSE boolean for now because
+# later on the 'get_new_round' function will take care of it for us.
 
 # Repeatable Game Loop ('main')
 play = True
 while play:
-    # Handle yo' business
-    refresh_display()
-    if current_round > 0:
-        display_win()
+    # We can put the game logic at the start of the loop
+    # BEFORE we need to worry about any display output...
 
+    # 1. Get a first random ID:
+    # 2. Get a second random ID:
+    game_round = get_new_round(first_id)
+    # We allow ourselves to specify the 'first' ID in the function call because
+    # we want to compare against the 'second' ID from each previous round.
+
+    # Update the 'recent' list:
+    ezdbg.append([game_round, "Current IDs:"])
+    # recent_entity_ids = list(set(recent_entity_ids + game_round))
+    if current_round == 0:
+        # First round of the game we need to add the first ID too
+        recent_entity_ids = update_recent_entities(game_round[0])
+    # All subsequent rounds we just add the second ID,
+    # because there is only one new ID per round
+    recent_entity_ids = update_recent_entities(game_round[1])
+
+    # ...including working, out ahead of time, which answer will win this round
+    correct_answer = get_correct_answer()
+
+    # NOW we can start to handle the game's display output...
+    # Clear the screen and display the game's logo
+    refresh_display()
+
+    # Print out any debug messages we accumulated, and reset the list
     if ezdbg:
         easy_debug(ezdbg)
+        ezdbg = []
 
+    # Determine if the last round was WON or LOST...
+    # We'll set the round counter to -1 if the player lost, so
+    if current_round < 0:
+        display_lose()
+        # Ask player if they want to play again...
+        if play_again():
+            # - To play again we must reset the game variables
+            current_round = 0
+            recent_entity_ids = []
+            correct_answer = None
+            first_id = False
+        else:
+            # - Otherwise we can go ahead and exit the game-loop
+            # play = False
+            break
+
+    # But if this isn't the first round then the player MUST have won previously
+    # so we can display the "win" message and their current score
+    elif current_round > 0:
+        display_win()
+
+    # Update the round counter to display the current round
     current_round += 1
     print(f">> Round {current_round}...\n")
 
-    # 2. Get a second random ID
-    game_round = new_round(first_id)
-
-    # 3. Display info: First vs Second
+    # 3. Display the game's round: First vs Second
     display_game_round()
 
-    # 4. Ask player to guess which has the most followers
+    # 4. Ask player to guess which has the most followers:
     player_choice = get_player_choice()
-    easy_debug(player_choice, "Player's choice [ID]:")
+    ezdbg.append([player_choice, "Player chose [ID]:"])
 
-    # 5. Check the player's guess
-    correct = check_answer()
+    # 5. Check the player's guess:
+    # 6. If player was wrong: game over...
+    if player_choice != correct_answer:
+        # set the round counter to -1 to signify the player lost
+        current_round = -1
 
-    # 6. If player was right, play on:
-    #    - i.e. select a new ID to play against their answer
-    if correct:
+    # 7. If player was right: play on...
+    else:
+        # 8. Keep track of score: update the score for a win
+        score = current_round
+        # The next round compares against the second option from this round
         first_id = game_round[1]
 
-    # 7. If player was wrong, game over:
-    #    - ask to play again?
-    else:
-        refresh_display()
-        display_lose()
-        if play_again():
-            current_round = 0
-            recent_entity_ids = []
-            first_id = get_random_entity_id()
-        else:
-            play = False
-
-    # 8. Keep track of score (i.e. How many rounds guessed right?)
-    # - This is taken care of with the `current_round` variable!
-    ezdbg = []
-    ezdbg.append([recent_entity_ids, "Recent IDs:"])
-    ezdbg.append([game_round, "Current IDs:"])
+    # Update the debug output for 'recent IDs'
+    # > F-String ensures the value at THIS moment is used!
+    ezdbg.append([f"{recent_entity_ids}", "Recent IDs:"])
 
 print("Thank you for playing!")
