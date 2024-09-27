@@ -56,18 +56,18 @@ MAX_LENGTH_OF_RECENT = 8
 
 
 def clear_terminal():
-    """cross-platform way to clear the terminal screen"""
+    """A cross-platform way to clear the terminal screen"""
     system("cls||clear")
 
 
 def refresh_display():
-    """clear the terminal screen and (re)print the logo"""
+    """Clears the terminal screen and (re)prints the logo"""
     clear_terminal()
     print(LOGO)
 
 
 def easy_debug(obj, msg=""):
-    """Easy print objects for debugging"""
+    """Easily prints objects and messages for debugging"""
     print("\nDebug:")
     if isinstance(obj, list):
         for o, m in obj:
@@ -78,7 +78,7 @@ def easy_debug(obj, msg=""):
 
 
 def update_recent_entities(latest, max_length=MAX_LENGTH_OF_RECENT):
-    """Updates the GLOBAL list of the most recently used entities.
+    """Updates and returns a list of the most recently used entity IDs.
     When more than MAX_LENGTH items: Removes the oldest item first, then...
     Appends the index for the latest item onto the list.
     """
@@ -98,7 +98,7 @@ def update_recent_entities(latest, max_length=MAX_LENGTH_OF_RECENT):
 
 
 def get_random_entity_id():
-    """Returns a randomly selected index ID from `game_data`,
+    """Returns a randomly selected list index from `game_data`,
     ensuring that is NOT in the list of recently used IDs"""
     recent = True
     while recent:
@@ -126,7 +126,7 @@ def format_entity_info(entity):
 
 
 def display_game_round():
-    """Prints the display output for the current game round"""
+    """Prints out the display for the current game round"""
     for i, data_id in enumerate(game_round, 1):
         print(f"{i}. " + format_entity_info(game_data[data_id]))
         if i == 1:
@@ -135,7 +135,7 @@ def display_game_round():
 
 def get_player_choice():
     """Prompts the player to select their choice for this round,
-    Returns an Integer (the `game_data` index for the chosen entity)"""
+    Returns an Integer [i.e. `game_data` index for the chosen entity]"""
     valid = False
     while not valid:
         print("\nWho has more followers?")
@@ -159,7 +159,7 @@ def display_lose():
 
 def get_correct_answer():
     """Checks which option has the highest number of followers.
-    Returns an Integer [index ID]"""
+    Returns an Integer [`game_data` index]"""
     if (
         game_data[game_round[0]]['follower_count']
         > game_data[game_round[1]]['follower_count']
@@ -256,8 +256,9 @@ while play:
         recent_entity_ids = []
         current_round = 0
         score = 0
-        # NOTE: Rest game_round, or generate new random seed ID?!!
-        # - and loop back to the start
+        # NOTE: Rest 'game_round', or generate new random seed ID?
+        #       For some reason this seems to work anyway without it!
+        # Restart the game-loop to begin new game:
         continue
 
     # Check >> if this isn't the first round (means the player WON)
