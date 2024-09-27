@@ -45,8 +45,14 @@ VERSUS = r"""
 | |/ (__  )
 |___/____/
 """
+OR = r"""
+  ____  _____
+ / __ \/ ___/
+/ /_/ / /    
+\____/_/     
+"""
 GAME_DATA_LENGTH = len(game_data)
-MAX_LENGTH_OF_RECENT = 5
+MAX_LENGTH_OF_RECENT = 8
 
 
 def clear_terminal():
@@ -91,45 +97,45 @@ def update_recent_entities(latest, max_length=MAX_LENGTH_OF_RECENT):
     return recent
 
 
-def get_random_id():
-    """Returns a random index number for the `game_data` List"""
-    return randint(0, GAME_DATA_LENGTH - 1)
-
-
 def get_random_entity_id():
-    """Returns a randomly selected EntityID from `game_data`,
+    """Returns a randomly selected index ID from `game_data`,
     ensuring that is NOT in the list of recently used IDs"""
     recent = True
     while recent:
-        entity_id = get_random_id()
+        entity_id = randint(0, GAME_DATA_LENGTH - 1)
         if entity_id not in recent_entity_ids:
             recent = False
     # easy_debug(entity_id, "(fnc:get_random_entity_id) EntityID:")
     return entity_id
 
 
-def display_entity_info(entity):
-    """Prints out the information from the given `game_data` Item,
-    a Dictionary, comprising the following Keys:
-    - 'name', 'description', 'country', 'follower_count'
+def get_entity_info(entity_id):
+    """Returns the dictionary from `game_data` at the given index"""
+    return game_data[entity_id]
+
+
+def format_entity_info(entity):
+    """Returns a formatted String of the information for the given entity,
+    a Dictionary object, which must contain the following Keys:
+    -- 'name', 'description', 'country', 'follower_count'
     """
-    print(f"Name: {entity['name']}")
-    print(f"Description: {entity['description']}")
-    print(f"Country: {entity['country']}")
+    output = f"{entity['name']}: "
+    output += f"a {entity['description']}, "
+    output += f"from {entity['country']}"
+    return output
 
 
 def display_game_round():
-    """Generate the display output for the current game round"""
-    for i, data_id in enumerate(game_round):
-        display_entity_info(game_data[data_id])
-        if i == 0:
-            print(VERSUS)
+    """Prints the display output for the current game round"""
+    for i, data_id in enumerate(game_round, 1):
+        print(f"{i}. " + format_entity_info(game_data[data_id]))
+        if i == 1:
+            print(OR)
 
 
 def get_player_choice():
     """Prompts the player to select their choice for this round,
-    Takes their input and validates it,
-    Returns an Integer (list index for choice in current `game_round`)"""
+    Returns an Integer (the `game_data` index for the chosen entity)"""
     valid = False
     while not valid:
         print("\nWho has more followers?")
@@ -139,15 +145,6 @@ def get_player_choice():
         else:
             print("Please enter only 1 or 2!")
     return game_round[int(choice) - 1]
-
-
-def get_new_round(first=False):
-    """Creates a new game round with two `game_data` index IDs to compare.
-    Returns a List [id_1, id_2]"""
-    if not first:
-        first = get_random_entity_id()
-    second = get_random_entity_id()
-    return [first, second]
 
 
 def display_win():
@@ -203,84 +200,86 @@ def play_again():
 ##
 # Start game:
 ##
-ezdbg = []
-
 # Initialise Global Variables:
-# refresh_display()
+ezdbg = []
 recent_entity_ids = []
 current_round = 0
 score = 0
-correct_answer = None
-# 1. Get a first random ID:
-first_id = False
-# We only need to initialise this to a FALSE boolean for now because
-# later on the 'get_new_round' function will take care of it for us.
+# correct_answer = None
+# 1. Get initial random entity for comparison:
+random_entity = get_random_entity_id()
+# NOTE:
+# Each round compares a new entity with the 'second' from the previous round.
+# We will save this value later, then generate a new one for the next round.
+# -- We can also go ahead and update the 'recent' list now too:
+recent_entity_ids = update_recent_entities(random_entity)
+# -- We also need to initialise the List for the round (because I used a List!)
+game_round = [None, random_entity]
 
 # Repeatable Game Loop ('main')
 play = True
 while play:
-    # We can put the game logic at the start of the loop
-    # BEFORE we need to worry about any display output...
-
-    # 1. Get a first random ID:
-    # 2. Get a second random ID:
-    game_round = get_new_round(first_id)
-    # We allow ourselves to specify the 'first' ID in the function call because
-    # we want to compare against the 'second' ID from each previous round.
-
-    # Update the 'recent' list:
-    ezdbg.append([game_round, "Current IDs:"])
-    # recent_entity_ids = list(set(recent_entity_ids + game_round))
-    if current_round == 0:
-        # First round of the game we need to add the first ID too
-        recent_entity_ids = update_recent_entities(game_round[0])
-    # All subsequent rounds we just add the second ID,
-    # because there is only one new ID per round
+    # 1. Set the first entity for this round, updated from the previous round:
+    # first_entity = second_entity
+    # 2. Get a NEW random second entity for comparison:
+    # second_entity = get_random_entity_id()
+    # -- Update the game for a new round of comparisons:
+    game_round = [game_round[1], get_random_entity_id()]
+    # -- AND update the list of recently used entities:
     recent_entity_ids = update_recent_entities(game_round[1])
+    ezdbg.append([game_round, "Current IDs:"])
 
-    # ...including working, out ahead of time, which answer will win this round
+    # -- We can also work out, ahead of time, which answer will win this round!
     correct_answer = get_correct_answer()
 
     # NOW we can start to handle the game's display output...
-    # Clear the screen and display the game's logo
+    # -- Clear the screen and display the game's logo
     refresh_display()
 
-    # Print out any debug messages we accumulated, and reset the list
+    # -- Print out any debug messages we accumulated, and reset the list
     if ezdbg:
         easy_debug(ezdbg)
         ezdbg = []
 
-    # Determine if the last round was WON or LOST...
-    # We'll set the round counter to -1 if the player lost, so
+    # -- Determine if the the player won or lost the last round, and show the
+    #    relevant message(s):
+    # Check >> if the round counter is -1 (means the player LOST)
     if current_round < 0:
         display_lose()
+
         # Ask player if they want to play again...
-        if play_again():
-            # - To play again we must reset the game variables
-            current_round = 0
-            recent_entity_ids = []
-            correct_answer = None
-            first_id = False
-        else:
-            # - Otherwise we can go ahead and exit the game-loop
-            # play = False
+        if not play_again():
+            # If NOT we can go ahead and exit the game-loop!
             break
 
-    # But if this isn't the first round then the player MUST have won previously
-    # so we can display the "win" message and their current score
-    elif current_round > 0:
+        # ...but to play again we must reset the game variables:
+        recent_entity_ids = []
+        current_round = 0
+        score = 0
+        # NOTE: Rest game_round, or generate new random seed ID?!!
+        # - and loop back to the start
+        continue
+
+    # Check >> if this isn't the first round (means the player WON)
+    if current_round > 0:
+        # 8. Keep track of the player's score:
+        score = current_round
         display_win()
 
-    # Update the round counter to display the current round
+    # -- Update the round counter and display the current round:
     current_round += 1
-    print(f">> Round {current_round}...\n")
+    print(
+        f">> Round {current_round}... "
+        "Who has the most followers on Social Media?\n"
+    )
 
-    # 3. Display the game's round: First vs Second
+    # 3. Display the output for this round: First vs Second
     display_game_round()
 
-    # 4. Ask player to guess which has the most followers:
+    # 4. Ask player to guess which entity has the most followers:
     player_choice = get_player_choice()
     ezdbg.append([player_choice, "Player chose [ID]:"])
+    # NOTE: The debug message won't be shown until the next round!
 
     # 5. Check the player's guess:
     # 6. If player was wrong: game over...
@@ -289,14 +288,10 @@ while play:
         current_round = -1
 
     # 7. If player was right: play on...
-    else:
-        # 8. Keep track of score: update the score for a win
-        score = current_round
-        # The next round compares against the second option from this round
-        first_id = game_round[1]
+    # -- i.e. let the game-loop continue (no need to do anything here!)
 
     # Update the debug output for 'recent IDs'
-    # > F-String ensures the value at THIS moment is used!
+    # -- F-String ensures the value at THIS moment is used!
     ezdbg.append([f"{recent_entity_ids}", "Recent IDs:"])
 
 print("Thank you for playing!")
