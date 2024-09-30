@@ -2,7 +2,6 @@
 -=< 100 Days of Python >=-
 -=[ Day 012 ]=-
 """
-
 """
 NOTE: The course has been updated! - 5th Aug 2024
 The course was updated (and presumably reorganised), which has resulted in
@@ -17,6 +16,7 @@ these services, the course was refactored to encourage using the JetBrains
 """
 # >> Pylint clean-up for this file
 # pylint: disable=redefined-outer-name,global-statement
+
 """
 L.87 - Namespaces: Local vs Global
 
