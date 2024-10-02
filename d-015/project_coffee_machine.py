@@ -92,11 +92,13 @@ resources = {
 # ---------------------------- >>
 import sys  # nopep8
 from decimal import Decimal  # nopep8
+# Ref: https://docs.python.org/3.12/library/decimal.html
 
 ##
 # Globals:
 # - Constants:
-DEBUG = True
+DEBUG_ENABLED = False
+DECIMAL_FORMAT = Decimal(10) ** -2
 COMMANDS = ['report', 'OFF']
 DRINKS = list(MENU.keys())
 COINS = {
@@ -117,7 +119,7 @@ resources['money'] = Decimal(0.00)
 def ezdbg(dbg_object, dbg_message="", fnc_name=None):
     """Easily print objects and messages for debugging"""
     # Global disable debugging
-    if not DEBUG:
+    if not DEBUG_ENABLED:
         return
     header = "[Debug]: "
     if fnc_name:
@@ -141,7 +143,27 @@ def ezdbg(dbg_object, dbg_message="", fnc_name=None):
             print(f'- "{dbg_object}" -- {type(dbg_object)}')
     else:
         print(f'- {dbg_message} {dbg_object} -- {type(dbg_object)}')
-    print("\n")
+    print()  # blank line
+
+
+def decimal_round(x, fp=DECIMAL_FORMAT):
+    """Rounds a number to a fixed number of decimal places
+    Returns a Decimal (to `fp` decimal places)"""
+    return Decimal(x).quantize(fp)
+
+
+def decimal_multiplication(x, y, fp=DECIMAL_FORMAT):
+    """Maintains fixed-point numerical format for multiplication operations
+    Returns a Decimal (to `fp` decimal places)"""
+    return (x * y).quantize(fp)
+
+
+def decimal_division(x, y, fp=DECIMAL_FORMAT):
+    """Maintains fixed-point numerical format for division operations
+    Returns a Decimal (to `fp` decimal places)"""
+    return (x / y).quantize(fp)
+    # NOTE:
+    # Addition and Subtraction with Decimals automatically preserve fixed point
 
 
 def is_maintenance_operation(command):
@@ -176,12 +198,13 @@ def get_user_input(prompt, accepted):
 
 
 def get_numeric_input(prompt):
-    """Prompts the user for a numeric input using the given `prompt`;
+    """Prompts the user for a (+ve) numeric input using the given `prompt`;
     Returns the unmodified input [String]"""
     input_is_valid = False
     while not input_is_valid:
         user_input = input(f"{prompt}")
-        if user_input.isnumeric() and Decimal(user_input) > 0:
+        if user_input.isnumeric() and int(user_input) > 0:
+            # NOTE: this validation ensures the number is ALSO positive!
             input_is_valid = True
         else:
             print("Invalid amount, please try again")
@@ -196,14 +219,21 @@ def enough_resources(requested_drink):
 
     required_ingredients = MENU[requested_drink]['ingredients']
     dbg.append([required_ingredients, "Ingredients:"])
+    ezdbg(dbg, fnc_name="enough_resources")
 
     has_sufficient = True
     for ingredient, required_amount in required_ingredients.items():
+        # reset debug for loop
+        dbg = []
+        dbg.append([ingredient, "Ingredient:"])
+        dbg.append([required_amount, "Amount Req.:"])
+        dbg.append([resources[ingredient], "Amount Cur.:"])
+        ezdbg(dbg, fnc_name="enough_resources")
         if resources[ingredient] < required_amount:
             print(f"Sorry there is not enough {ingredient}.")
             has_sufficient = False
 
-    ezdbg(dbg, fnc_name="enough_resources")
+    # ezdbg(dbg, fnc_name="enough_resources")
     return has_sufficient
 
 
@@ -233,8 +263,8 @@ def take_coin_input(coin, value):
     """Takes a numerical input from the user (the number of coins given);
     Returns the total value of those coins [Decimal]"""
     number_of_coins = int(get_numeric_input(f"How many {coin}? "))
-    amount_given = value * number_of_coins
-    return Decimal(amount_given)
+    amount_given = decimal_multiplication(value, number_of_coins)
+    return amount_given
 
 
 def take_payment(cost):
@@ -244,19 +274,23 @@ def take_payment(cost):
     dbg = []
     total_value = Decimal(0)
     coin_names = list(COINS.keys())
+    shorthands = [c[0] for c in coin_names] + ['c']
+
     dbg.append([f"{coin_names}", "Coin names:"])
+    dbg.append([f"{shorthands}", "Shorthands:"])
 
     # generate the input prompt for coin selection
     prompt = "\nSelect a coin to add: "
     options = generate_input_prompt_options(coin_names + ['cancel'])
-    shorthands = [c[0] for c in coin_names] + ['c']
+    # generate the list of accepted input values
     accepted_values = coin_names + ['cancel'] + shorthands
 
-    dbg.append([f"{options}", "Generated Options:"])
-    dbg.append([f"{shorthands}", "Shorthands:"])
-    dbg.append([f"{accepted_values}", "Accepted values:"])
+    # show debug before loop
+    ezdbg(dbg, fnc_name="take_payment")
 
     while total_value < cost:
+        # reset debug in loop
+        dbg = []
         # current_coin = get_user_input(prompt + options, accepted_values)
         user_input = get_user_input(prompt + options, accepted_values)
 
@@ -275,16 +309,21 @@ def take_payment(cost):
         coin_total = take_coin_input(current_coin, COINS[current_coin])
         dbg.append([coin_total, "Amount given:"])
 
+        # update the running total
         total_value += coin_total
-        if total_value < cost:
-            print(f"Current Total: ${total_value:.2f}")
-            remaining_balance = Decimal(cost) - total_value
-            print(f"Remaining Balance: ${remaining_balance:.2f}")
-        else:
-            print("Thank you!")
 
-    ezdbg(dbg, fnc_name="take_payment")
-    return Decimal(total_value)
+        # check if there is still money left to pay
+        if total_value < cost:
+            dbg.append([total_value, "Total: $"])
+            print(f"Current Total: ${total_value:.2f}")
+            remaining_balance = cost - total_value
+            print(f"Remaining Balance: ${remaining_balance:.2f}")
+            dbg.append([remaining_balance, "Remaining: $"])
+        else:
+            print(f"Total paid: ${total_value}. Thank you!\n")
+        # show debug in loop
+        ezdbg(dbg, fnc_name="take_payment")
+    return decimal_round(total_value)
 
 
 def make_drink(drink):
@@ -295,141 +334,153 @@ def make_drink(drink):
     drink_ingredients = MENU[drink]['ingredients']
     dbg.append([drink_ingredients, "Required:"])
 
-    updated_resources = {}
+    # store a local copy of the global resources to modify, and return
+    # - avoids use of 'global' keyword!
+    updated_resources = resources
     for ingredient, quantity_used in drink_ingredients.items():
-        updated_resources[ingredient] = resources[ingredient] - quantity_used
+        updated_resources[ingredient] -= quantity_used
 
     dbg.append([resources, "Resources:"])
     dbg.append([updated_resources, "Updated:"])
     ezdbg(dbg, fnc_name="make_drink")
+
     return updated_resources
 
 
 ##
 # Coffee Machine Program Requirements:
 ##
-# 1. Prompt the user by asking:
-#   “What would you like? (espresso/latte/cappuccino):”
-#   a. Check the user’s input to decide what to do next.
-#   b. The prompt should show every time action has completed
-#   -- i.e. once the drink is dispensed, the prompt should show again to serve
-#   the next customer.
-# ezdbg(DRINKS + COMMANDS, "ALL accepted inputs:")
-input_prompt = "Please select a drink: "
-input_options = generate_input_prompt_options(DRINKS)
-accepted_shorthands = [d[0] for d in DRINKS]
-accepted_inputs = DRINKS + accepted_shorthands
-user_selection = get_user_input(input_prompt + input_options, accepted_inputs)
+# Machine runs until it is switched OFF!
+while True:
+    # 1. Prompt the user by asking:
+    #   “What would you like? (espresso/latte/cappuccino):”
+    #   a. Check the user’s input to decide what to do next.
+    #   b. The prompt should show every time action has completed
+    #   -- i.e. once the drink is dispensed, the prompt should show again to
+    #   serve the next customer.
+    # ezdbg(DRINKS + COMMANDS, "ALL accepted inputs:")
+    input_prompt = "Please select a drink: "
+    input_options = generate_input_prompt_options(DRINKS)
+    input_prompt += input_options
+    accepted_shorthands = [d[0] for d in DRINKS]
+    accepted_inputs = DRINKS + accepted_shorthands
+    user_selection = get_user_input(input_prompt, accepted_inputs)
+    print()  # blank line
+    # ezdbg(f"{user_selection}", "Before:")
+    if user_selection in accepted_shorthands:
+        user_selection = DRINKS[accepted_shorthands.index(user_selection)]
+    # ezdbg(f"{user_selection}", "After:")
 
-# ezdbg(f"{user_selection}", "Before:")
+    # Check for maintenance commands:
+    # - i.e. handle non-drink requests
+    if user_selection in COMMANDS:
+        selected_operation = user_selection
 
-if user_selection in accepted_shorthands:
-    user_selection = DRINKS[accepted_shorthands.index(user_selection)]
+        # 2. Turn off the Coffee Machine by entering “off” to the prompt.
+        #   a. For maintainers of the coffee machine, they can use “off” as the
+        #   secret word to turn off the machine. Your code should end execution
+        #   when this happens.
+        if selected_operation == "OFF":
+            # Shutdown the coffee machine!
+            print("Shutting down for maintenance...")
+            sys.exit()
 
-# ezdbg(f"{user_selection}", "After:")
+        # 3. Print report.
+        #   a. When the user enters “report” to the prompt, a report should be
+        #   generated that shows the current resource values, e.g:
+        #       Water: 100ml
+        #       Milk: 50ml
+        #       Coffee: 76g
+        #       Money: $2.5
+        if selected_operation == 'report':
+            print("Reporting current status...")
+            print(f"Water: {resources['water']}ml")
+            print(f"Milk:  {resources['milk']}ml")
+            print(f"Coffee: {resources['coffee']}g")
+            print(f"Money: ${resources['money']:.2f}\n")
 
-# Check for maintenance commands:
-# - i.e. handle non-drink requests
-if user_selection in COMMANDS:
-    selected_operation = user_selection
+    # Handle drinks requests:
+    if user_selection in DRINKS:
+        selected_drink = user_selection
+        drink_cost = Decimal(MENU[selected_drink]['cost'])
 
-    # 2. Turn off the Coffee Machine by entering “off” to the prompt.
-    #   a. For maintainers of the coffee machine, they can use “off” as the secret
-    #   word to turn off the machine. Your code should end execution when this
-    #   happens.
-    if selected_operation == "OFF":
-        # Shutdown the coffee machine!
-        print("Shutting down for maintenance...")
-        sys.exit()
-
-    # 3. Print report.
-    #   a. When the user enters “report” to the prompt, a report should be
-    #   generated that shows the current resource values, e.g:
-    #       Water: 100ml
-    #       Milk: 50ml
-    #       Coffee: 76g
-    #       Money: $2.5
-    if selected_operation == 'report':
-        print("Reporting current status...")
-        print(f"Water: {resources['water']}ml")
-        print(f"Milk:  {resources['milk']}ml")
-        print(f"Coffee: {resources['coffee']}g")
-        print(f"Money: ${resources['money']:.2f}")
-
-# Handle drinks requests:
-if user_selection in DRINKS:
-    selected_drink = user_selection
-
-    # 4. Check resources sufficient?
-    #   a. When the user chooses a drink, the program should check if there
-    #   are enough resources to make that drink.
-    #   -- e.g. if a Latte requires 200ml water, but there is only 100ml left
-    #   in the machine, it should not make the drink, but instead print:
-    #   “Sorry there is not enough water.”
-    #   b. The same should happen if another resource is depleted (i.e. milk
-    #   or coffee).
-    if not enough_resources(selected_drink):
-        # return money?
-        # pass
-        print("Sorry, please notify maintenance to restock the machine")
-    else:
-        # make drink?
-        # pass
-        # 5. Process coins.
-        #   a. If there are sufficient resources to make the drink selected,
-        #   then the program should prompt the user to insert coins.
-        #   b. Remembering:
-        #   quarters = $0.25, dimes = $0.10, nickels = $0.05, pennies = $0.01
-        #   c. Calculate the monetary value of the coins inserted,
-        #   e.g. 1 quarter, 2 dimes, 1 nickel, 2 pennies = ...
-        #   ...0.25 + 0.1 x 2 + 0.05 + 0.01 x 2 = $0.52
-        drink_cost = MENU[selected_drink]['cost']
-        print(f"Your {selected_drink} will cost: ${drink_cost:.2f}")
-        print("Please insert coins...")
-        payment_received = take_payment(drink_cost)
-
-        if payment_received < drink_cost:
-            print(f"Refunding coins: ${payment_received:.2f}")
+        # 4. Check resources sufficient?
+        #   a. When the user chooses a drink, the program should check if there
+        #   are enough resources to make that drink.
+        #   -- e.g. if a Latte requires 200ml water, but there is only 100ml
+        #   left in the machine, it should not make the drink, but instead
+        #   print: “Sorry there is not enough water.”
+        #   b. The same should happen if another resource is depleted
+        #   (i.e. milk or coffee).
+        if not enough_resources(selected_drink):
+            print("Please notify maintenance to restock the machine")
         else:
-            # 7. Make Coffee.
-            #   a. If the transaction is successful and there are enough
-            #   resources to make the drink the user selected, then the
-            #   ingredients to make the drink should be deducted from the
-            #   coffee machine resources, e.g:
-            #   -- Report before purchasing latte:
-            #       Water: 300ml
-            #       Milk: 200ml
-            #       Coffee: 100g
-            #       Money: $0
-            #   -- Report after purchasing latte:
-            #       Water: 100ml
-            #       Milk: 50ml
-            #       Coffee: 76g
-            #       Money: $2.5
-            #   b. Once all resources have been deducted, prompt the user:
-            #   e.g. “Here is your latte. Enjoy!” (If they chose a latte)
-            # Make the drink, updating the machine's resources
-            print("Dispensing beverage...")
-            resources = make_drink(selected_drink)
-            print(f"Here is your {selected_drink.capitalize()}. Enjoy!")
+            # 5. Process coins.
+            #   a. If there are sufficient resources to make the selected
+            #   drink, then the program should prompt the user to insert coins.
+            #   b. Remembering:
+            #   quarters=$0.25, dimes=$0.10, nickels=$0.05, pennies=$0.01
+            #   c. Calculate the monetary value of the coins inserted,
+            #   e.g. 1 quarter, 2 dimes, 1 nickel, 2 pennies = ...
+            #   ...0.25 + 0.1 x 2 + 0.05 + 0.01 x 2 = $0.52
+            print(f"Your {selected_drink} will cost: ${drink_cost:.2f}")
+            print("Please insert coins...")
+            payment_received = take_payment(drink_cost)
 
-# 6. Check transaction successful?
-#   a. Check that the user has inserted enough money to purchase the drink
-#   they selected -- e.g Latte cost $2.50, but they only inserted $0.52 then
-#   after counting the coins the program should say:
-#   “Sorry that's not enough money. Money refunded.”
-#   b. But if the user has inserted enough money, then the cost of the drink
-#   gets added to the machine as the profit and this will be reflected the
-#   next time “report” is triggered. e.g:
-#       Water: 100ml
-#       Milk: 50ml
-#       Coffee: 76g
-#       Money: $2.5
-#   c. If the user inserted too much money, the machine should offer change.
-#   -- e.g. “Here is $2.45 dollars in change.”
-#   -- The change should be rounded to 2 decimal places
+            # 6. Check transaction successful?
+            #   a. Check that the user has inserted enough money to purchase
+            #   the drink they selected -- e.g Latte cost $2.50, but they only
+            #   inserted $0.52 then after counting the coins the program should
+            #   say: “Sorry that's not enough money. Money refunded.”
+            if payment_received < drink_cost:
+                print(f"Refunding coins: ${payment_received:.2f}")
+            else:
+                #   b. But if the user has inserted enough money, then the cost
+                #   of the drink gets added to the machine as the profit and
+                #   this will be reflected the next time “report” is triggered.
+                #   e.g:
+                #       Water: 100ml
+                #       Milk: 50ml
+                #       Coffee: 76g
+                #       Money: $2.5
+                ezdbg(resources['money'], "Resource: $")
+                resources['money'] += drink_cost
+                #   c. If the user inserted too much money, the machine should
+                #   offer change, e.g. “Here is $2.45 dollars in change.”
+                #   The change should be rounded to 2 decimal places.
+                if payment_received > drink_cost:
+                    change = payment_received - drink_cost
+                    print(f"You have ${change:.2f} in change.\n")
+                # 7. Make Coffee.
+                #   a. If the transaction is successful and there are enough
+                #   resources to make the drink the user selected, then the
+                #   ingredients to make the drink should be deducted from the
+                #   coffee machine resources, e.g:
+                #   -- Report before purchasing latte:
+                #       Water: 300ml
+                #       Milk: 200ml
+                #       Coffee: 100g
+                #       Money: $0
+                #   -- Report after purchasing latte:
+                #       Water: 100ml
+                #       Milk: 50ml
+                #       Coffee: 76g
+                #       Money: $2.5
+                #   b. Once all resources have been deducted, prompt the user:
+                #   e.g. “Here is your latte. Enjoy!” (If they chose a latte)
+                # Make the drink, updating the machine's resources
+                print("Dispensing beverage...")
+                resources = make_drink(selected_drink)
+                print(f"Here is your {selected_drink.capitalize()}. Enjoy!\n")
 
+    # Debugging output:
+    # if dbg:
+    #    ezdbg(dbg)
 
-# Debugging output:
-# if dbg:
-#    ezdbg(dbg)
+# NOTE: Suggested Improvements
+# 1. Add a 'restock' function (to increase resources once depleted)
+# 2. Handle money correctly, i.e.:
+#   - Keep track of coins, both already in the machine and those entered whilst
+#    giving payment.
+#   - Only give change when there are the correct amount of the required coins
+#   available. Print a message if unable to give exact change.
