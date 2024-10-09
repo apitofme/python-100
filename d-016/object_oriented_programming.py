@@ -418,7 +418,7 @@ help you build out this project.
 """
 """
 NOTE:
-The project can be located in the sub-folder for today's lessons, whilst the
-resources (including start-file archive) are located in the "_resources"
-sub-folder INSIDE the project's folder.
+The project can be located in the "project" sub-folder for today, whilst the
+resources (including start-file archive) are located in a separate sub-folder
+INSIDE the project folder.
 """
