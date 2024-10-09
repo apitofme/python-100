@@ -175,6 +175,246 @@ object but each is also unique. So one waiter can be responsible for tables
 4, 5 and 6, whilst another can be assigned to 1, 2 and 3. One might be
 carrying a plate, another not. One might be taking an order, whilst another is
 taking a payment. Each waiter is a unique instance of the waiter class/object.
+"""
 
+"""
+L.110 - Constructing Objects and Accessing their Attributes and Methods
 
+You can think of a 'class' as a blueprint, it is the design document from
+which the actual object(s) are built. In order to get an object in our code
+we need to create an instance of the class using, the syntax we use to do this
+looks like the following example:
+
+    car = CarBlueprint()
+
+Class names are distinguished from other names as they are written with the
+words concatenated together (i.e. no underscores) and the first letter of each
+word capitalised, this is often referred to as "Pascal Case". As you can see
+the class name is on the right-hand side of the assignment operator, i.e. it
+is the thing being assigned. The object reference then, is the name the class
+is being assigned to, on the left-hand side of the operator.
+
+Once we have an object (an instance of a class) we want to be able to access
+the attributes and methods of that object, i.e. the variables and functions
+provided by, and associated with, the object. To do this we use the 'dot'
+syntax, which you have probably seen before when we've imported modules to
+use in our code. The syntax is simple, here's an example:
+
+    car.speed
+
+First we put the name of the Object we want to use (e.g. 'car'), followed by
+a 'dot' ("."), and finally the name of the attribute we want to access, in
+this case "speed". This would give us the value stored in that attribute, on
+that specific car object. Remember each object is a unique instance of the
+class used to create it, so if we had created more than one car object they
+could all have different values stored in that named attribute, and we would
+only get the value from the specific instance we're referencing.
+
+We can reference methods (functions of the object) in much the same way, the
+notable difference being that we need to use a set of parentheses after the
+named reference to actually call the method, e.g.:
+
+    car.stop()
+
+Other than the dot-notation used to reference them they behave in exactly the
+same way as other functions, they're only called "methods" because they're
+associated with an object. They are defined using the "def" statement, they
+can take arguments, and they can return values, just like any other function
+we have made and used up to now. Arguments are passed between the parentheses
+as normal, for example:
+
+    car.accelerate(50)
+
+...could be used to accelerate the car to 50 mph/kmh.
+"""
+
+"""
+L.111 - How to Add Python Packages and Use PyPI
+
+Thankfully we don't have to write all of our own classes, and we've talked
+before about taking advantage of code already written by other developers. In
+fact Python has probably one of the largest ecosystems of freely available
+packages for people to install and use in their own code. The most common
+platform to discover these and install them from is called PyPI (short for
+the "Python Package Index") which can be found here: https://pypi.org
+
+We have used and created 'modules' for ourselves in our own projects before,
+as single files containing resources we wanted to import in to our main code
+file (e.g. ascii-art, lists of data, etc.). Packages differ from modules
+because they are much larger and contain multiple files or sub-modules, where
+the code has been packaged together with a specific goal or purpose in mind.
+Such as providing the means and functionality to interact with a particular
+file type, or to create and manipulate certain types of data.
+
+In addition, whilst previously we have only used modules we have created for
+ourselves, or we have imported packages that are included (by default) with
+every standard Python distribution, and so have always been available to us.
+Any other package we might want to use however, we must first install from
+PyPI (or wherever) in to our local Python library, to make the package
+available to use with the "import" statement.
+
+Let's suppose that we wanted to be able to create a table of different
+Pokemon characters in a way that allowed us to document their different types
+(e.g. Pikachu is an Electric type etc). We might then want to be able to
+print that table out to the console in a way that looked...well, like a table.
+- e.g.
+        =============================
+        | Pokemon Name |    Type    |
+        =============================
+        |   Pikachu    |  Electric  |
+        -----------------------------
+        |     etc.     |    etc.    |
+
+Doing this ourselves, manually, by figuring out the spacing, then formatting
+the necessary output strings to `print()`, so that it all lined up and looked
+pretty, would be a laborious and daunting task. Thankfully other people
+have already solved this problem before, and since they were kind enough to
+publish their efforts as a Package, we can leverage their work to make ours
+easier. We just need to pick a package that provides the features we want,
+download and install it locally so we can use it.
+
+For the case of our Pokemon table, if went ahead and searched on PyPI for
+something like "ascii tables" we would see a whole bunch of projects come up,
+some of which sound like they would do what we want, but others less so. To
+save time let's just agree to choose a package called "PrettyTable"...
+- https://pypi.org/project/prettytable/
+
+There many possible ways you could install this package, depending on your OS,
+code editor (IDE), how you installed Python, and whether or not you are using
+a virtual environment (venv). For simplicity's sake, the default and most
+consistent way however is from the command line using something called "pip".
+This should be included with any standard Python distribution and will install
+the package to your global python environment.
+
+You can find a guide here:
+- https://packaging.python.org/en/latest/tutorials/installing-packages/
+
+...more specifically, once you are sure that 'pip' is available to run:
+- https://packaging.python.org/en/latest/tutorials/installing-packages/#use-pip-for-installing
+
+But essentially PyPI is set up so that you can simply copy the command from
+the page of the package you want to install, paste it in to your terminal
+console and run it, e.g.:
+
+    pip install prettytable
+
+If this command doesn't work you may need to refer to the guide linked above.
+
+We can then test to make sure we can use it in our project with the following
+line of code:
+"""
+from prettytable import PrettyTable  # nopep8
+"""
+Run the file and if there are no errors then you have successfully installed
+the PrettyTable package from PyPI, congratulations. We'll pick up the next
+steps and actually start using this package to format our output in the next
+lesson.
+"""
+
+"""
+L.112 - Practice Modifying Object Attributes and Calling Methods
+
+Now that we have the 'prettytable' package installed we can look at how we're
+going to use it.
+
+NOTE: There's some documentation right on the package's page on PyPI:
+- https://pypi.org/project/prettytable/
+
+First we need to import the package, but rather than just "import prettytable"
+we can specify the class we want to use and just import that specific module,
+i.e. "from prettytable import PrettyTable". Notice the 'Pascal Case' of the
+name on the right-hand side, after the keyword 'import', this denotes that
+it's a Class.
+
+We already have our import statement above though, so we can use that rather
+than re-import the package (which would cause a warning with PyLint). So the
+next thing we need to do is create our object from the class we've imported.
+"""
+table = PrettyTable()
+"""
+This creates an instance of the PrettyTable class and saves the new object
+to the variable name 'table'. Already, if we go ahead and print the variable
+we will see the barebones of a table (with no data)...
+NOTE: Printing the type() will show us that the object is an instance of a
+'class', specifically the PrettyTable class within the prettytable module.
+"""
+print(f"Type: {type(table)}\n")
+print(table)
+"""
+Now, using the documentation, let's add some columns and data to our table
+so that we can display some information about our Pokemon in a nice formatted
+output...
+"""
+table.add_column(
+    "Pokemon",
+    ['Pikachu', 'Squirtle', 'Charmander']
+)
+table.add_column(
+    "Type",
+    ['Electric', 'Water', 'Fire']
+)
+
+# we can print the table again to see the information above displayed 'pretty'
+print(table)
+"""
+Okay so there we have the formatted output, and we have called a method on an
+object to do so. Remember that we can also change the attributes of objects,
+so let's have a look at how we can do that using our PrettyTable.
+
+For example if we wanted to change the appearance of our table then we can
+simply change the values of some of the attributes that govern the table's
+visual style. For example if we wanted to change the alignment of the text
+in the table's columns we could use the "align" attribute...
+"""
+table.align = "l"
+print(table)
+"""
+Notice here we assign a value, as opposed to passing an argument in
+parentheses, because this time we're referencing an attribute (i.e. variable)
+rather than calling a method (i.e. function).
+
+You can see a list of some of the attributes you can change by reading through
+the documentation. An older but perhaps simpler version of which can be found
+here: https://code.google.com/archive/p/prettytable/wikis/Tutorial.wiki
+
+So we have covered how to create an object, how to access and call methods on
+the object, and how to access and update values of the object's attributes.
+Although this is a relatively simple demonstration, the way you create and
+interact with objects is the same regardless of how complex the program or
+class definition.
+"""
+
+"""
+L.112 - Python Objects Quiz
+"""
+# Completed on Udemy
+
+"""
+L.113 - Building the Coffee Machine in OOP
+
+One of the great things about OOP, when taking advantage of pre-written
+modules and packages, is that we don't have to know or understand how the
+implementation of a given piece of code works, we just need to know and
+understand how to use it (e.g. by importing and calling methods etc.). We
+can just trust that it does what it says it does, then we can install it and
+import it and use it in our code as a part of our program.
+
+As a demonstration of how to do this we are going to re-implement the "Coffee
+Machine" project from before, but this time using OOP. The resources will be
+provided so we don't have to write our own classes, we can just import them as
+modules, as though we'd installed an external package. Then we can create and
+use the objects made available to us by these classes, and solve the problem.
+This will have the same criteria as before, so it will need to have the same
+functionality, accept the same inputs etc. -- Documentation is provided, to
+explain each of the classes and what different attributes and methods are
+available on each.
+
+Once you have downloaded and extracted all of the necessary course resources
+in order to tackle this project, you can go ahead and start adding your code
+to the "main.py" file for your solution.
+NOTE: You should NOT edit or alter any of the other files in any way! Treat
+them as though they are an external package you have installed in order to
+help you build out this project.
+
+-- The project can be located in the sub-folder for today's lessons.
 """
