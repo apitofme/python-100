@@ -415,6 +415,10 @@ to the "main.py" file for your solution.
 NOTE: You should NOT edit or alter any of the other files in any way! Treat
 them as though they are an external package you have installed in order to
 help you build out this project.
-
--- The project can be located in the sub-folder for today's lessons.
+"""
+"""
+NOTE:
+The project can be located in the sub-folder for today's lessons, whilst the
+resources (including start-file archive) are located in the "_resources"
+sub-folder INSIDE the project's folder.
 """
