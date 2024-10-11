@@ -168,5 +168,65 @@ within the class itself.
 """
 L.119 - Adding Methods to a Class
 
+When we create our own classes, as well as adding attributes to store what the
+object HAS, we can also add our own methods to provide the functionality for
+what the object DOES. We define these methods in exactly the same way as we
+do with any other function, i.e. using the 'def' keyword followed by the name
+for the method. The only difference compared to a regular function is that a
+method MUST have the 'self' reference as the first parameter, just like we did
+with the 'init' method. Even if we don't add any other parameter (meaning the
+method when called would take no arguments) we must still add 'self' in the
+definition. This is just one of the rules of using OOP and classes in Python.
 
+NOTE: Other programming languages that support OOP do not always require an
+explicit internal reference to the containing object (though many use "this"
+rather than "self"), however part of the concept used in the design of Python
+is "Explicit is better than implicit".
+
+To demonstrate how this works let's re-consider our 'User' class from before
+and imagine that it is for a social-media website, where a user might have
+bot ha count of how many followers they have and how many other people they
+are following. We would need a method so that when someone clicks "Follow" on
+another user's profile then that user's follower count increases. Of course
+this should also increase the "following" count for the user who clicked the
+button...
+"""
+class SocialUser:
+    """User model for our Social-Media website"""
+
+    def __init__(self, user_id, username):
+        self.id = user_id
+        self.username = username
+        self.followers = 0
+        self.following = 0
+
+    def follow(self, user):
+        """Method called when 'THIS' user clicks "Follow" on another user"""
+        # increase the "follower" count for the (other) user
+        user.followers += 1
+        # increase the "following" count for THIS user
+        self.following += 1
+
+# Let's create our user objects:
+social_user_1 = SocialUser("123", "james")
+social_user_2 = SocialUser("456", "jessie")
+
+# Now suppose '1' decides to follow '2', we can call the method:
+social_user_1.follow(social_user_2)
+
+# We can print the counts for each to see the result:
+print(
+    f"Name: {social_user_1.username}; "
+    f"Followers: {social_user_1.followers}; "
+    f"Following: {social_user_1.following}"
+)
+print(
+    f"Name: {social_user_2.username}; "
+    f"Followers: {social_user_2.followers}; "
+    f"Following: {social_user_2.following}"
+)
+"""
+As you can see from the output, after calling the "follow" method on the first
+'SocialUser' object, and passing the object for the User being followed, we
+have successfully increased the respective 'followers' and 'following' counts.
 """
