@@ -32,7 +32,7 @@ for qd in question_data:
 """
 L.123 - Quiz Project Part 4: How to keep showing new Questions
 
-    1. Add a method "still_has_questions()" to the QuizBrain class
+    1. (see "quiz_brain.py")
     2. Create loop to keep calling the "next_question()" method until there
        are no questions left in the 'question_list'.
 """
@@ -41,3 +41,12 @@ quiz = QuizBrain(question_bank)
 # print(f"Q#: {quiz.question_number}")
 while quiz.still_has_questions():
     quiz.next_question()
+
+"""
+L.124 - Quiz Project Part 5: Checking Answers and Keeping Score
+    
+    1-4. (see "quiz_brain.py")
+    5. Show the total score at the end of the quiz (out of total Q's)
+"""
+print("You've completed the quiz.")
+print(f"Your final score is: {quiz.score}/{quiz.question_number}")
