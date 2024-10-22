@@ -24,5 +24,7 @@ class Question:
     def __init__(self, question_dic):
         # Essentially we convert the incoming Dictionary in to an Object.
         # NOTE: This way is more flexible than using a DataClass!
+        # ...However, given the modelling done in "data.py", this isn't really
+        # necessary, since we only take the two data-components we need there.
         for k, v in question_dic.items():
             setattr(self, k, v)
