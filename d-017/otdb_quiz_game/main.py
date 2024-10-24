@@ -17,9 +17,20 @@ import requests
 from opentriviadb import Client, Category
 from opentriviadb.errors import NoResults, TokenEmpty, TokenNotFound
 
+# Game options:
 MAX_ROUNDS = 5
 MAX_QUESTIONS = 20
-E_PROMPT = "Invalid response!"
+VALIDATION_ERROR = "Invalid response!"
+
+# API options:
+DIFFICULTY_OPTIONS = ["easy", "medium", "hard"]
+TYPE_OPTIONS = ["boolean", "multiple"]
+
+# Default values:
+DEFAULT_AMOUNT = 10
+DEFAULT_CATEGORY = 9  # <- General Knowledge
+DEFAULT_DIFFICULTY = "easy"
+DEFAULT_TYPE = "boolean"
 
 
 @dataclass
@@ -83,6 +94,11 @@ class Validate:
     def is_between(value, lower, upper):
         """Check if an integer number is between 'lower' and 'upper' values"""
         return float(lower) < float(value) < float(upper)
+
+    @staticmethod
+    def in_values(value, values: list):
+        """Returns True if value is in the list of values, False otherwise"""
+        return value in values
 
 
 def is_valid(validation, value, *args, **kwargs):
@@ -150,7 +166,7 @@ def is_valid(validation, value, *args, **kwargs):
     return valid
 
 
-def ask(question, error_msg=E_PROMPT, validation=None, expects=str):
+def ask(question, error_msg=VALIDATION_ERROR, validation=None, expects=str):
     """Asks the user the question, takes their input and passes it off for
     validation, Returns the expected format or a String"""
     valid = False
@@ -165,17 +181,18 @@ def ask(question, error_msg=E_PROMPT, validation=None, expects=str):
     # Convert answer to a Boolean, i.e.
     # -- 'true' / 't' / 'yes' / 'y' / '1' = True
     # -- 'false' / 'f' / 'no' / 'n' / '0' = False
-    if isinstance(expects, bool):
+    if expects == bool:
+        # print("Interpreting answer as boolean...")
         answer = Validate.eval_boolean(answer)
 
-    elif not isinstance(expects, str):
+    elif expects != str:
         # print(f"Return type requested: {expects}")
         try:
             answer = expects(answer)
         except ValueError as e:
             print(e)
 
-    # print(f"Answer type: {type(answer)}")
+    # print(f"Answer {answer}, Type: {type(answer)}")
     return answer
 
 
@@ -198,24 +215,87 @@ def get_categories():
 
 def select_category(categories):
     """Allow user to select from the list of question categories"""
-    lookup = []
-    # Display all categories
-    for i, cat in enumerate(categories, 1):
-        lookup.append(cat.id)
-        print(f"{i}. {cat.name}")
-    # Workout the highest number that should be accepted
-    highest = len(lookup) - 1
-    # Ask player to select one category from the list
-    choice = ask(
-        expects=int,
-        question="Please enter a category number: ",
-        error_msg="Please enter a number from the list shown above!",
-        validation=[
-            Validate.as_integer,
-            (Validate.is_less_than, highest)
-        ],
-    )
-    return lookup[choice-1]  # <- account for enumeration offset!
+    if ask(
+        "Would you like to choose a category for this round? [y/n] ",
+        expects=bool,
+    ):
+        lookup = []
+        # Display all categories
+        for i, cat in enumerate(categories, 1):
+            lookup.append(cat.id)
+            print(f"{i}. {cat.name}")
+
+        # Ask player to select one category from the list
+        choice = ask(
+            expects=int,
+            question="Please enter a category number: ",
+            error_msg="Please enter a number from the list shown above!",
+            validation=[
+                Validate.as_integer,
+                (Validate.is_less_than, len(lookup) - 1)
+            ],
+        )
+        # print(f"FNC: select_category -- returned choice = {choice}")
+        return lookup[choice-1]  # <- account for enumeration offset!
+    return False
+
+
+def select_type():
+    """Allow user to select the type of question"""
+    if ask(
+        "Do you want to choose the type of questions for this round? [y/n] ",
+        expects=bool,
+    ):
+        # NOTE: May need to handle more types in the future!
+        choice = ask(
+            "Please enter either 'T' for True/False, "
+            "or 'M' for Multiple Choice: ",
+            validation=(Validate.in_values, {'values': ['t', 'm']})
+        )  # NOTE: user input via 'ask' ALWAYS uses .lower()!
+        # print(f"FNC: select_type -- returned choice = {choice}")
+        if choice == 't':
+            return "boolean"
+        if choice == 'm':
+            return "multiple"
+    return False
+
+
+def select_difficulty():
+    """Allow user to select the question difficulty level"""
+    if ask(
+        "Do you want to choose a difficulty for the questions this round? "
+        "[y/n] ",
+        expects=bool,
+    ):
+        choice = ask(
+            "Please enter [E]asy, [M]edium or [H]ard: ",
+            validation=(
+                Validate.in_values,
+                {'values': ['e', 'm', 'h', 'easy', 'medium', 'hard']}
+            )
+        )  # NOTE: user input via 'ask' ALWAYS uses .lower()!
+        if choice == 'e':
+            return "easy"
+        if choice == 'm':
+            return "meduim"
+        if choice == 'h':
+            return "hard"
+        return choice
+    return False
+
+
+def select_amount():
+    """Allow user to select the number of questions for the round"""
+    if ask(
+        "Do you want to choose how many questions for this round? ",
+        expects=bool,
+    ):
+        return ask(
+            "How many questions do you want this round? [MAX=20] ",
+            validation=(Validate.is_less_than, MAX_QUESTIONS),
+            expects=int
+        )
+    return False
 
 
 def get_constant_name(value, cls):
@@ -273,12 +353,6 @@ async def quiz_round(game, q_num, q_cat, q_diff, q_type):
 
 async def quiz_game():
     """Run the Quiz Game using the OpenTriviaDB API Client"""
-    # API options:
-    number_of_questions = 10
-    question_category = 9
-    question_difficulty = "easy"
-    question_type = "boolean"
-
     # Game variables:
     current_round = 1
     round_score = 0
@@ -288,27 +362,37 @@ async def quiz_game():
 
     # Game loop:
     while current_round <= number_of_rounds:
-        if ask(
-            "Would you like to choose a category for this round? [y/n] ",
-            expects=bool,
-        ):
-            question_category = select_category(all_categories)
-            category_name = Category(question_category)
+        # Select question category:
+        qc = (
+            select_category(all_categories)
+            or DEFAULT_CATEGORY
+        )
+        question_category = Category(qc)
+        # Get the category name from the constants in the Category class
+        category_name = question_category.name.replace("_", " ").title()
 
-        q_type = ""
-        if question_type == "multiple":
-            q_type = question_type + " choice "
-        if question_type == "boolean":
-            q_type = "True/False "
-
-        print(f"Category name: {category_name}")
-        category_name = str(question_category[8:]).capitalize()
         print(f"Category value: {question_category}")
+        print(f"Category name: {category_name}")
 
+        # Select question type:
+        question_type = select_type() or DEFAULT_TYPE
+        type_name = ""
+        if question_type == "multiple":
+            type_name = question_type + " choice "
+        if question_type == "boolean":
+            type_name = "True/False "
+
+        # Select question difficulty:
+        question_difficulty = select_difficulty() or DEFAULT_DIFFICULTY
+
+        # Select question amount:
+        question_amount = select_amount() or DEFAULT_AMOUNT
+
+        # Display round header:
         print(f"Round {current_round}...")
-        print(f"This will consist of {number_of_questions} "
-              f"{question_difficulty}, {q_type}questions of "
-              f"{category_name}.\n"
+        print(f"This will consist of {question_amount} "
+              f"{question_difficulty}, {type_name}questions "
+              f"in {category_name}.\n"
               )
 
         async with Client() as client:
@@ -319,12 +403,15 @@ async def quiz_game():
             #    question_category = Category(question_category)
 
             try:
-                round_score, round_questions = quiz_round(client,
-                                                          number_of_questions,
-                                                          question_category,
-                                                          question_difficulty,
-                                                          question_type
-                                                          )
+                round_score, round_questions = (
+                    await quiz_round(
+                        client,
+                        question_amount,
+                        question_category,
+                        question_difficulty,
+                        question_type
+                    )
+                )
 
             except TokenNotFound:
                 await client.request_token()
@@ -363,7 +450,7 @@ all_categories = get_categories()
 number_of_rounds = ask(
     expects=int,
     question="How many rounds would you like to play? ",
-    error_msg=E_PROMPT + ": Please enter a numerical character...",
+    error_msg=VALIDATION_ERROR + ": Please enter a numerical character...",
     validation=[Validate.as_integer, Validate.is_greater_than_zero]
 )
 
