@@ -28,7 +28,7 @@ TYPE_OPTIONS = ["boolean", "multiple"]
 
 # Default values:
 DEFAULT_AMOUNT = 10
-DEFAULT_CATEGORY = 9  # <- General Knowledge
+DEFAULT_CATEGORY = 9  # <- General Knowledge = 9
 DEFAULT_DIFFICULTY = "easy"
 DEFAULT_TYPE = "boolean"
 
@@ -55,7 +55,7 @@ class Validate:
             return True
         if value in Validate.BOOL_FALSE:
             return False
-        raise ValueError(f'Unable to evaluate value "{value}" as Boolean')
+        # raise ValueError(f'Unable to evaluate value "{value}" as Boolean')
 
     @staticmethod
     def as_boolean(value):
@@ -277,7 +277,7 @@ def select_difficulty():
         if choice == 'e':
             return "easy"
         if choice == 'm':
-            return "meduim"
+            return "medium"
         if choice == 'h':
             return "hard"
         return choice
@@ -298,11 +298,6 @@ def select_amount():
     return False
 
 
-def get_constant_name(value, cls):
-    """Get the name of a Constant from it's value"""
-    return [name for name, val in cls.__dict__.items() if val == value]
-
-
 async def connect_client():
     """Create OpenTriviaDB Client instance,
     optionally request a token,
@@ -318,7 +313,7 @@ async def connect_client():
 
 
 async def quiz_round(game, q_num, q_cat, q_diff, q_type):
-    """Uses the OpenTriviaDB Client object (game) to run a round of Questions"""
+    """Uses OpenTriviaDB Client object (game) to run a round of Questions"""
     # Round variables:
     current_score = 0
     current_question = 0
@@ -398,9 +393,6 @@ async def quiz_game():
         async with Client() as client:
             # Request a token for the game session (avoids repeat questions)
             await client.request_token()
-
-            # if not isinstance(question_category, Category):
-            #    question_category = Category(question_category)
 
             try:
                 round_score, round_questions = (
