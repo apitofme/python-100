@@ -16,12 +16,19 @@ pen.down()
 pen.speed(0)
 # Ref: https://docs.python.org/3.12/library/turtle.html#turtle.speed
 
-for _ in range(100):
-    colour = (r, g, b) = random.sample(range(0, 255), 3)
-    pen.color(colour)
-    pen.circle(100)
-    # Change the angle so the next circle is offset
-    pen.left(3.6)
+
+def draw_spirograph(radius, count):
+    """Draws {count} number of circles with a radius of {radius}
+    Each offset by the result of: 360 / {count}"""
+    for _ in range(count):
+        r, g, b = random.sample(range(0, 255), 3)
+        pen.color((r, g, b))
+        pen.circle(radius)
+        # Change the angle so the next circle is offset
+        pen.left(360 / count)
+
+
+draw_spirograph(100, 30)
 
 # Keep the display window open until we click on it
 window.exitonclick()
