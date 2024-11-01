@@ -165,29 +165,83 @@ To update the colour palette either:
     - Simply delete the JSON file and pass the desired image file as a
     parameter to `get_palette` (above).
 """
+GRID_COLUMNS = 8
+GRID_ROWS = 6
+COLUMN_SPACE = 50
+ROW_SPACE = 50
+DOT_SIZE = 25
+BORDER_RATIO = 0.25
+# NOTE: Values for BORDER_RATIO can be between 0.1 and 1.0, however values
+# between 0.1 and 0.5 generally work best!
+# -- Larger borders for smaller grids, OR smaller borders for larger grids!
+
 print("\nStarting draw operation...")
-pen = Turtle()
+# Screen Configuration:
 window = Screen()
-
-DOT_SPACING = 33
-DOT_SIZE = 15
-
-# Pre drawing set up
-window.title("Hirstian Art for the Masses Baby!")
-window.setup(width=1200, height=800)
-window.setworldcoordinates(-200, -200, 500, 500)
 window.colormode(255)
-pen.speed(0)
-pen.up()  # <- Do NOT draw a line!
+window.title("Hirstian Art for the Masses Baby!")
+# - Calculate grid size:
+grid_width = GRID_COLUMNS * COLUMN_SPACE
+grid_height = GRID_ROWS * ROW_SPACE
+# - Calculate window size
+border_x = grid_width * BORDER_RATIO
+border_y = grid_height * BORDER_RATIO
+print(f"Border: {border_x} x {border_y}")
+screen_width = grid_width + (2 * border_x)
+screen_height = grid_height + (2 * border_y)
+# print(f"Screen: {screen_width} x {screen_height}")
+window.setup(
+    width=screen_width,
+    height=screen_height,
+    startx=0,
+    starty=0,
+)
 
-# Create a grid of 10x10 coloured dots
+# canvas_x, canvas_y = window.screensize()
+# print(f"Canvas size: {canvas_x} x {canvas_y}")
+# NOTE: `window.screensize()` does not seem to return the actual canvas size,
+# at least not at this point, so it is useless to calculate borders
+# ... weird!
+
+# - Calculate screen scale coordinates
+lower_left_x = -border_x
+lower_left_y = -(border_y / 2)
+# NOTE: After some testing it seems halving the 'lower-y' coord works best?!
+upper_right_x = grid_width + border_x
+upper_right_y = grid_height + border_y
+print(f"Coords:\n- Lower: {lower_left_x} x {lower_left_y}")
+print(f"- Upper: {upper_right_x} x {upper_right_y}")
+window.setworldcoordinates(
+    lower_left_x,
+    lower_left_y,
+    upper_right_x,
+    upper_right_y,
+)
+# Turtle configuration:
+pen = Turtle()
+pen.speed("fastest")
+pen.up()  # <- Do NOT draw a line!
+pen.hideturtle()
+
+# Create a grid of coloured dots
+for y in range(GRID_ROWS):
+    y_position = (y+1) * ROW_SPACE
+    # print(f"Line: {y + 1}")
+    for x in range(GRID_COLUMNS):
+        dot_colour = random.choice(colour_palette)
+        if x % GRID_COLUMNS == 0:
+            pen.goto(0, y_position)
+        # print(f"[DOT {(y * 10) + x + 1}] Colour: {dot_colour}")
+        pen.dot(DOT_SIZE, dot_colour)
+        pen.forward(COLUMN_SPACE)
+
+"""
+>> Previous implementation: one loop for the total number of dots...
+
 for n in range(100):
     dot = n+1
     dot_colour = random.choice(colour_palette)
-    # NOTE: May need to exclude colours that are too close to White or Black,
-    # depending on the source image used.
 
-    # We want 10 dots per row, with each row also spaced 50 units apart
     if n % 10 == 0:
         # print(f"Line: {(dot // 10)+1}")
         y_coord = DOT_SPACING * (dot // 10)
@@ -197,6 +251,7 @@ for n in range(100):
     pen.dot(DOT_SIZE, dot_colour)
     pen.forward(DOT_SPACING)
 
+"""
 print("...done!")
 # Keep the display window open until we click on it
 window.exitonclick()
