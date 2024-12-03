@@ -19,20 +19,70 @@ in the 90's.
 > L.149 - Create a Snake Class & Move to OOP
 > L.150 - How to Control the Snake with a Keypress
 """
-# Define constants:
-SNAKE_BODY_UNIT_SIZE = 20
-SNAKE_START_LENGTH = 3
 
 
-def get_head_position():
-    """Get the position for the 'head' segment of the Snake"""
-    return snake_body[0].pos()
+class Snake:
+    """Defines all properties and methods belonging to the 'Snake' object
+    for the Turtle Snake Game
+    """
 
+    # Define constants:
+    SEGMENT_SIZE = 20
+    START_LENGTH = 3
 
-def set_head_position(x, y):
-    """Set the position for the 'head' segment of the Snake"""
-    head = snake_body[0]
-    head.setpos(x, y)
+    def __init__(self):
+        self.segments = []
+        # Initialise the starting Snake body segments:
+        for i in range(self.START_LENGTH):
+            segment = self.new_segment()
+            segment.setx(-(self.SEGMENT_SIZE * i))
+            self.add_segment(segment)
+
+    @property
+    def length(self):
+        """Returns an Integer: the length of the 'segments' List"""
+        return len(self.segments)
+
+    def new_segment(self):
+        """Create a new segment (i.e. a Turtle object) for the Snake.
+        Returns a Turtle object instance"""
+        segment = Turtle(shape="square")
+        segment.penup()
+        segment.color("white")
+        # Resize turtles down to 10x10:
+        # segment.resizemode('user')
+        # segment.shapesize(0.5, 0.5, 1)
+        return segment
+
+    def add_segment(self, segment=None):
+        """Adds a new segment to the Snake's body"""
+        if segment is not None:
+            self.segments.append(segment)
+        else:
+            self.segments.append(self.new_segment())
+
+    def get_head_position(self):
+        """Get the position for the 'head' segment of the Snake"""
+        return self.segments[0].pos()
+
+    def set_head_position(self, x, y=None):
+        """Set the position for the 'head' segment of the Snake"""
+        if y is not None:
+            self.segments[0].setpos(x, y)
+        else:
+            self.segments[0].setpos(x)
+
+    def move(self):
+        """Moves the snake's body"""
+        # Working from the last segment towards the 'head'...
+        for n in range(self.length-1, 0, -1):
+            # Set the position of the current segment
+            # to that of the one in front of it...
+            self.segments[n].setpos(
+                self.segments[n-1].pos()
+            )
+        # Finally update the position of the 'head' segment:
+        self.segments[0].forward(self.SEGMENT_SIZE)
 
 
 # Initialise and configure Screen object:
@@ -44,29 +94,14 @@ window.title("Turtle: Snake Game")
 window.tracer(0)
 # NOTE: MUST manually call 'update()' to refresh the screen!
 
-# Initialise starting 'snake' turtles:
-snake_body = []
-for i in range(SNAKE_START_LENGTH):
-    t = Turtle(shape="square")
-    t.penup()
-    t.color("white")
-    if i > 0:
-        t.setx(-(SNAKE_BODY_UNIT_SIZE * i))
-    snake_body.append(t)
-
-snake_length = len(snake_body)
-
+snake = Snake()
 window.update()
 # window.exitonclick()
 
 game_over = False
 while not game_over:
     window.update()
-    time.sleep(0.2)
-    for n in range(snake_length-1, 0, -1):
-        snake_body[n].setpos(
-            snake_body[n-1].pos()
-        )
-    snake_body[0].forward(SNAKE_BODY_UNIT_SIZE)
+    time.sleep(0.125)
+    snake.move()
 
 window.exitonclick()
