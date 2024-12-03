@@ -6,6 +6,7 @@ Project: Build the 'Snake' Game
 NOTE: The goal for this project will be split over the next 2 days!
 """
 from turtle import Turtle, Screen
+import time
 """
 Snake Game - Part 1:
 
@@ -39,22 +40,33 @@ window = Screen()
 window.setup(width=600, height=600)
 window.bgcolor("black")
 window.title("Turtle: Snake Game")
+# Turn animation off
+window.tracer(0)
+# NOTE: MUST manually call 'update()' to refresh the screen!
 
 # Initialise starting 'snake' turtles:
 snake_body = []
-for _ in range(SNAKE_START_LENGTH):
+for i in range(SNAKE_START_LENGTH):
     t = Turtle(shape="square")
     t.penup()
     t.color("white")
+    if i > 0:
+        t.setx(-(SNAKE_BODY_UNIT_SIZE * i))
     snake_body.append(t)
 
 snake_length = len(snake_body)
 
-for i in range(snake_length):
-    head_x, head_y = get_head_position()
-    if i > 0:
-        new_x = head_x - (SNAKE_BODY_UNIT_SIZE * i)
-        new_y = head_y  # <- Currently Horizontal!
-        snake_body[i].setpos(new_x, new_y)
+window.update()
+# window.exitonclick()
+
+game_over = False
+while not game_over:
+    window.update()
+    time.sleep(0.2)
+    for n in range(snake_length-1, 0, -1):
+        snake_body[n].setpos(
+            snake_body[n-1].pos()
+        )
+    snake_body[0].forward(SNAKE_BODY_UNIT_SIZE)
 
 window.exitonclick()
