@@ -37,11 +37,23 @@ class Snake:
             segment = self.new_segment()
             segment.setx(-(self.SEGMENT_SIZE * i))
             self.add_segment(segment)
+        self.head = self.segments[0]
 
     @property
     def length(self):
         """Returns an Integer: the length of the 'segments' List"""
         return len(self.segments)
+
+#    @property
+#    def head(self):
+#        """Returns a Turtle object: the First in the 'segments' List"""
+#        return self.segments[0]
+# NOTE: The 'head' will ALWAYS be the first item in the segments list!
+
+    @property
+    def tail(self):
+        """Returns a Turtle object: the Last in the 'segments' List"""
+        return self.segments[-1]
 
     def new_segment(self):
         """Create a new segment (i.e. a Turtle object) for the Snake.
@@ -63,14 +75,14 @@ class Snake:
 
     def get_head_position(self):
         """Get the position for the 'head' segment of the Snake"""
-        return self.segments[0].pos()
+        return self.head.pos()
 
     def set_head_position(self, x, y=None):
         """Set the position for the 'head' segment of the Snake"""
         if y is not None:
-            self.segments[0].setpos(x, y)
+            self.head.setpos(x, y)
         else:
-            self.segments[0].setpos(x)
+            self.head.setpos(x)
 
     def move(self):
         """Moves the snake's body"""
@@ -83,6 +95,30 @@ class Snake:
             )
         # Finally update the position of the 'head' segment:
         self.segments[0].forward(self.SEGMENT_SIZE)
+
+    def turn_left(self):
+        """Turns the Snake 90 degrees to the Left"""
+        self.head.lt(90)
+
+    def turn_right(self):
+        """Turns the Snake 90 degrees to the Right"""
+        self.head.rt(90)
+
+#    def direction_up(self):
+#        """Changes the Snake's heading to Up/North"""
+#        self.head.seth(90)
+
+#    def direction_down(self):
+#        """Changes the Snake's heading to Down/South"""
+#        self.head.seth(270)
+
+#    def direction_left(self):
+#        """Changes the Snake's heading to Left/West"""
+#        self.head.seth(180)
+
+#    def direction_right(self):
+#        """Changes the Snake's heading to Right/East"""
+#        self.head.seth(0)
 
 
 # Initialise and configure Screen object:
@@ -97,6 +133,11 @@ window.tracer(0)
 snake = Snake()
 window.update()
 # window.exitonclick()
+window.listen()
+# window.onkey(snake.direction_up, "Up")
+# window.onkey(snake.direction_down, "Down")
+window.onkey(snake.turn_left, "Left")
+window.onkey(snake.turn_right, "Right")
 
 game_over = False
 while not game_over:
