@@ -8,7 +8,7 @@ NOTE: The goal for this project will be split over the next 2 days!
 from turtle import Turtle, Screen
 import time
 """
-Snake Game - Part 1:
+Snake Game - Part 1: Animation & Coordinates
 
 Over the course of today's lessons we will begin to implement our own version
 of the classic 'Snake' arcade game, made famous (again) by Nokia mobile phones
