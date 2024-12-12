@@ -5,7 +5,7 @@
 Project: Build the 'Snake' Game
 NOTE: For "Part 2" all OOP Classes are now in their own files!
 
->> Food Class
+>> L.154 - Create Food Class & Detect Collisions with Food
 """
 from turtle import Turtle
 from random import randint
