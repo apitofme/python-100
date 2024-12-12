@@ -8,6 +8,7 @@ from turtle import Screen
 import time
 from snake import Snake
 from food import Food
+from scoreboard import Scoreboard
 """
 Snake Game - Part 2: Inheritance & List Slicing
 
@@ -34,8 +35,7 @@ window.tracer(0)
 # Instantiate game objects:
 snake = Snake()
 food = Food()
-
-window.update()
+score = Scoreboard()
 
 # Set up event listeners for key controls:
 window.listen()
@@ -46,6 +46,9 @@ window.onkey(snake.right, "Right")
 # window.onkey(snake.turn_left, "Left")
 # window.onkey(snake.turn_right, "Right")
 
+# Allow exit game early:
+window.onkey(window.bye, "Escape")
+
 game_over = False
 while not game_over:
     window.update()
@@ -54,5 +57,6 @@ while not game_over:
     # Detect collision with Food (Default: 15):
     if snake.head.distance(food) < 20:
         food.refresh()
+        score.update()
 
 window.exitonclick()
