@@ -46,6 +46,15 @@ class Scoreboard(Turtle):
             font=self.font
         )
 
+    def game_over(self):
+        """Display the 'Game Over' message in the middle of the Screen"""
+        self.sety(0)
+        self.write(
+            "GAME OVER",
+            align=self.ALIGNMENT,
+            font=self.font
+        )
+
     def update(self, amount=1):
         """Increases the score and then displays it;
         -- Default increase amount = 1"""

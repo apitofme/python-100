@@ -22,10 +22,12 @@ their own module files!
 > L.156 - Detect Collisions with the Walls
 > L.157 - Detect Collisions with the Sanke's Own Tail
 """
+SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 600
 
 # Initialise and configure Screen object:
 window = Screen()
-window.setup(width=600, height=600)
+window.setup(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 window.bgcolor("black")
 window.title("Turtle: Snake Game")
 # Turn animation off
@@ -58,5 +60,15 @@ while not game_over:
     if snake.head.distance(food) < 20:
         food.refresh()
         score.update()
+    # Detect collision with Wall (window boundary)
+    x_boundary = (SCREEN_WIDTH // 2) - snake.SEGMENT_SIZE
+    y_boundary = (SCREEN_HEIGHT // 2) - snake.SEGMENT_SIZE
+    head_x, head_y = snake.head.pos()
+    if (
+        head_x < -x_boundary or head_x > x_boundary
+        or head_y < -y_boundary or head_y > y_boundary
+    ):
+        score.game_over()
+        game_over = True
 
 window.exitonclick()
