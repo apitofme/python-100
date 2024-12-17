@@ -56,11 +56,16 @@ while not game_over:
     window.update()
     time.sleep(0.125)
     snake.move()
+    # Fix the snake body covering Food (?):
+    food.forward(0)
+    # Fix keyboard response time:
+    window.update()
     # Detect collision with Food (Default: 15):
     if snake.head.distance(food) < 20:
         food.refresh()
         score.update()
-    # Detect collision with Wall (window boundary)
+        snake.add_segment()
+    # Detect collision with Wall (window boundary):
     x_boundary = (SCREEN_WIDTH // 2) - snake.SEGMENT_SIZE
     y_boundary = (SCREEN_HEIGHT // 2) - snake.SEGMENT_SIZE
     head_x, head_y = snake.head.pos()
@@ -70,5 +75,10 @@ while not game_over:
     ):
         score.game_over()
         game_over = True
+    # Detect collision with own body:
+    for segment in snake.body:
+        if snake.head.distance(segment) < 10:
+            score.game_over()
+            game_over = True
 
 window.exitonclick()

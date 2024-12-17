@@ -33,14 +33,20 @@ class Snake:
         # Initialise the starting Snake body segments:
         for i in range(self.START_LENGTH):
             segment = self.new_segment()
-            segment.setx(-(self.SEGMENT_SIZE * i))
-            self.add_segment(segment)
+            # segment.setx(-(self.SEGMENT_SIZE * i))
+            position = (-(self.SEGMENT_SIZE * i), 0)
+            self.add_segment(segment, position)
         self.head = self.segments[0]
 
     @property
     def length(self):
         """Returns an Integer: the length of the 'segments' List"""
         return len(self.segments)
+
+    @property
+    def body(self):
+        """Returns a List of all 'segments' except for the Head"""
+        return self.segments[1:]
 
     @property
     def tail(self):
@@ -58,12 +64,18 @@ class Snake:
         # segment.shapesize(0.5, 0.5, 1)
         return segment
 
-    def add_segment(self, segment=None):
+    def add_segment(self, segment=None, position=None):
         """Adds a new segment to the Snake's body"""
-        if segment is not None:
-            self.segments.append(segment)
-        else:
-            self.segments.append(self.new_segment())
+        if segment is None:
+            segment = self.new_segment()
+        if position is None:
+            if self.length == 0:
+                position = (0, 0)
+            else:
+                # tail_x, tail_y = self.tail.pos()
+                position = self.tail.pos()
+        segment.setpos(position)
+        self.segments.append(segment)
 
     def get_head_position(self):
         """Get the position for the 'head' segment of the Snake"""
